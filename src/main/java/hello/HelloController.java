@@ -44,7 +44,7 @@ public class HelloController {
 
     @RequestMapping("/freeboard")
     public String fb(){
-        return "redirect:/public/index.html";
+        return "<script>window.location.assign(\"/index.html\")</script>";
     }
 
 }
