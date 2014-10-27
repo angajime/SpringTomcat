@@ -1,3 +1,5 @@
 hello/ByeController.class
 hello/HelloController.class
+org/kohsuke/randname/RandomNameGenerator.class
 hello/Application.class
+org/kohsuke/randname/Dictionary.class
