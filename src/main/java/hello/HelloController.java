@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -13,7 +18,6 @@ public class HelloController {
 
     @RequestMapping("/")
     public String index() {
-
 
         String id = (new RandomNameGenerator(new Random().nextInt())).next();
 
@@ -30,6 +34,17 @@ public class HelloController {
         return "Hola " +
                 id +"! :) Acabamos de recibir esto de ti: <br>" +
                 data;
+    }
+
+    @RequestMapping("/get")
+    public String get(@PathVariable("urn") String urn) {
+        //contectarme a la url dada
+        return "Json de la respuesta";
+    }
+
+    @RequestMapping("/freeboard")
+    public String fb(){
+        return "redirect:/public/index.html";
     }
 
 }

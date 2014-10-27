@@ -53,7 +53,7 @@ public class Dictionary {
         int a = i%adjectives.size();
         int n = i/adjectives.size();
 
-        return adjectives.get(a)+"_"+nouns.get(n);
+        return adjectives.get(a)+"-"+nouns.get(n);
     }
 
     private void load(String name, List<String> col) throws IOException {
