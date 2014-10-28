@@ -41,7 +41,7 @@ public class Curl {
         }
         body = str.toString();
         try {
-            url = new URL(stringUrl);
+            url = new URL("10.95.20.162:8080/" + stringUrl);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
