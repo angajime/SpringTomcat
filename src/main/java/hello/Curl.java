@@ -57,13 +57,16 @@ public class Curl {
         }
     }
 
+
+
     /**
      * This method executes the petition to the DM server and returns an HTML webpage with the result of the petition.
      * If it returns a HTTP 401 then probably the user and password combination is invalid.
+     * @param channel The channel (Northbound, Southbound...)
      * @return Answer from server
      */
 
-    public String execute() {
+    public String execute(DMChannel channel) {
         try {
             //Creamos el esquema que se utilizará para procesar el challenge.
             DigestScheme md5Auth = new DigestScheme();
@@ -84,7 +87,7 @@ public class Curl {
                             new UsernamePasswordCredentials(username, password),
                             new BasicHttpRequest(HttpPost.METHOD_NAME,
                                     new URL(url.toString()).getPath()));
-                    Header contentType = new BasicHeader("Content-Type", "application/vnd.ericsson.m2m.SB+xml;version=1.0");
+                    Header contentType = getHeader(channel);
                     HttpPost httpPostFinal = new HttpPost(url.toURI());
                     Header[] headers = new Header[2];
                     headers[0] = contentType;
@@ -110,6 +113,18 @@ public class Curl {
             e.printStackTrace();
         }
         return body;
+    }
+
+    private BasicHeader getHeader(DMChannel channel) {
+        if (channel.equals(DMChannel.Northbound)) {
+            return new BasicHeader("Accept", "application/vnd.ericsson.m2m.NB+xml;version=1.0");
+        } else if (channel.equals(DMChannel.Southbound)) {
+            return new BasicHeader("Content-Type", "application/vnd.ericsson.m2m.SB+xml;version=1.0");
+        } else if (channel.equals(DMChannel.Provisioning)) {
+            return new BasicHeader("Content-type", "application/x-www-form-urlencoded");
+        } else {
+            throw new RuntimeException("Invalid DMChannel");
+        }
     }
 
     private String inputStreamToString(InputStream is) {
