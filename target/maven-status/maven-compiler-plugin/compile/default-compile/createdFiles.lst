@@ -1,5 +1,6 @@
-hello/HelloController.class
-hello/Application.class
 hello/ByeController.class
-org/kohsuke/randname/Dictionary.class
+hello/HelloController.class
 org/kohsuke/randname/RandomNameGenerator.class
+hello/Application.class
+org/kohsuke/randname/Dictionary.class
+hello/Client.class

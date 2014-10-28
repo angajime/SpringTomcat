@@ -1,10 +1,7 @@
 package hello;
 
 import org.kohsuke.randname.RandomNameGenerator;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +12,8 @@ import java.util.Random;
 
 @RestController
 public class HelloController {
+
+    private int counter = 0;
 
     @RequestMapping("/")
     public String index() {
@@ -36,10 +35,11 @@ public class HelloController {
                 data;
     }
 
-    @RequestMapping("/get")
-    public String get(@PathVariable("urn") String urn) {
+    @RequestMapping("/get/{urn}")
+    @ResponseBody
+    public Client get(@PathVariable("urn") String urn) {
         //contectarme a la url dada
-        return "Json de la respuesta";
+        return new Client(urn, counter++);
     }
 
     @RequestMapping("/freeboard")
