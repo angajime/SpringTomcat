@@ -29,6 +29,16 @@ public class Curl {
     private String body;
     private String hdr = "WWW-Authenticate";
 
+    /**
+     * This is the constructor for the Curl class. In this constructor you must provide the URL for the DM service, the username and user password
+     * and whatever you want to send in the body. Take into account that you don't need to add the location of the DM server. So instead of
+     * writing "http://dmserver:8181/m2m/provisioning/..." you only need to write "m2m/provisioning/...".
+     * @param stringUrl The URL
+     * @param name The user name
+     * @param pass The user password
+     * @param args The arguments for the petition
+     */
+
     public Curl(String stringUrl, String name, String pass, String... args) {
         username = name;
         password = pass;
