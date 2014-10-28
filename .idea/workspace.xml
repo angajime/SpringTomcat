@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="217654ab-11e8-4014-8738-ebc3f4a9ce5b" name="Default" comment="">
+    <list default="true" id="217654ab-11e8-4014-8738-ebc3f4a9ce5b" name="Default" comment="Fixed base URL. Now instead of providing an URL of type:&#10;&#10;dm/commands/for/dm&#10;&#10;You must provide an URL of type:&#10;&#10;commands/for/dm">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/hello/Curl.java" afterPath="$PROJECT_DIR$/src/main/java/hello/Curl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -60,7 +60,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/hello/Curl.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.73406595" vertical-offset="397" max-vertical-offset="2091">
-              <caret line="43" column="49" selection-start-line="43" selection-start-column="49" selection-end-line="43" selection-end-column="49" />
+              <caret line="43" column="44" selection-start-line="43" selection-start-column="44" selection-end-line="43" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -712,17 +712,21 @@
       <workItem from="1414435052601" duration="983000" />
       <workItem from="1414438148464" duration="1618000" />
       <workItem from="1414483002382" duration="768000" />
-      <workItem from="1414489954539" duration="1552000" />
+      <workItem from="1414489954539" duration="1675000" />
     </task>
     <task id="LOCAL-00001" summary="Added Curl class.">
       <created>1414490797574</created>
       <updated>1414490797574</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixed base URL. Now instead of providing an URL of type:&#10;&#10;dm/commands/for/dm&#10;&#10;You must provide an URL of type:&#10;&#10;commands/for/dm">
+      <created>1414493783489</created>
+      <updated>1414493783489</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16208000" />
+    <option name="totallyTimeSpent" value="16331000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -795,7 +799,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="Added Curl class." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Curl class." />
+    <MESSAGE value="Fixed base URL. Now instead of providing an URL of type:&#10;&#10;dm/commands/for/dm&#10;&#10;You must provide an URL of type:&#10;&#10;commands/for/dm" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed base URL. Now instead of providing an URL of type:&#10;&#10;dm/commands/for/dm&#10;&#10;You must provide an URL of type:&#10;&#10;commands/for/dm" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1178,7 +1183,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/hello/Curl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.73406595" vertical-offset="397" max-vertical-offset="2091">
-          <caret line="43" column="49" selection-start-line="43" selection-start-column="49" selection-end-line="43" selection-end-column="49" />
+          <caret line="43" column="44" selection-start-line="43" selection-start-column="44" selection-end-line="43" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
