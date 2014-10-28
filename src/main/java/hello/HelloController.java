@@ -28,14 +28,14 @@ public class HelloController {
     }
 
     @RequestMapping("/follow/{id}")
-    public String follow(@PathVariable("id") String id ,@RequestBody String data) {
+    public String follow(@PathVariable("id") String id) {
         //TODO: Leer del DM
         System.out.println("Procesado");
         return "Estas siguiendo al pavo: "+id;
     }
 
     @RequestMapping("/send/as/{id}")
-    public String send(@RequestBody String data){
+    public String send(@PathVariable("id") String id ,@RequestBody String data){
         //TODO: Almacenar en DM
         return "Hola " +
                 id +"! :) Acabamos de recibir esto de ti: <br>" +
