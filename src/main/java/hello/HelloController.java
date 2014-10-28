@@ -27,9 +27,16 @@ public class HelloController {
                 "</a>";
     }
 
-    @RequestMapping("/send/as/{id}")
-    public String del(@PathVariable("id") String id ,@RequestBody String data) {
+    @RequestMapping("/follow/{id}")
+    public String follow(@PathVariable("id") String id ,@RequestBody String data) {
+        //TODO: Leer del DM
         System.out.println("Procesado");
+        return "Estas siguiendo al pavo: "+id;
+    }
+
+    @RequestMapping("/send/as/{id}")
+    public String send(@RequestBody String data){
+        //TODO: Almacenar en DM
         return "Hola " +
                 id +"! :) Acabamos de recibir esto de ti: <br>" +
                 data;
@@ -38,7 +45,6 @@ public class HelloController {
     @RequestMapping("/get/{urn}")
     @ResponseBody
     public Client get(@PathVariable("urn") String urn) {
-        //contectarme a la url dada
         return new Client(urn, counter++);
     }
 
