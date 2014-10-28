@@ -55,6 +55,9 @@
           <element id="library" level="project" name="Maven: org.eclipse.jetty.orbit:org.eclipse.jdt.core:3.7.1" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-actuator:1.1.8.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-actuator:1.1.8.RELEASE" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.3.5" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.3.2" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.6" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="SpringTomcat/web/Web" />
