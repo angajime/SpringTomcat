@@ -57,7 +57,13 @@ public class Curl {
         }
     }
 
-    public String getBody(String... params) {
+    /**
+     * This method executes the petition to the DM server and returns an HTML webpage with the result of the petition.
+     * If it returns a HTTP 401 then probably the user and password combination is invalid.
+     * @return Answer from server
+     */
+
+    public String execute() {
         try {
             //Creamos el esquema que se utilizará para procesar el challenge.
             DigestScheme md5Auth = new DigestScheme();
