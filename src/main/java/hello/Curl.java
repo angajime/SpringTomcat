@@ -1,13 +1,14 @@
 package hello;
 
 import org.apache.http.Header;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.MalformedChallengeException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -28,6 +29,13 @@ public class Curl {
     private URL url;
     private String body;
     private String hdr = "WWW-Authenticate";
+
+    private enum Method {
+        GET,
+        POST,
+        PUT,
+        DELETE
+    }
 
     /**
      * This is the constructor for the Curl class. In this constructor you must provide the URL for the DM service, the username and user password
@@ -57,7 +65,21 @@ public class Curl {
         }
     }
 
+    public String post(DMChannel channel) {
+        return execute(Method.POST, channel);
+    }
 
+    public String get(DMChannel channel) {
+        return execute(Method.GET, channel);
+    }
+
+    public String put(DMChannel channel) {
+        return execute(Method.PUT, channel);
+    }
+
+    public String delete(DMChannel channel) {
+        return execute(Method.DELETE, channel);
+    }
 
     /**
      * This method executes the petition to the DM server and returns an HTML webpage with the result of the petition.
@@ -66,13 +88,13 @@ public class Curl {
      * @return Answer from server
      */
 
-    public String execute(DMChannel channel) {
+    private String execute(Method method, DMChannel channel) {
         try {
             //Creamos el esquema que se utilizará para procesar el challenge.
             DigestScheme md5Auth = new DigestScheme();
             //Realizamos una petición vacia contra el servidor para obtener la informacion digest.
             HttpClient client = HttpClientBuilder.create().build();
-            HttpPost hg = new HttpPost(url.toURI());
+            HttpUriRequest hg = getHttpRequest(method);
             HttpResponse badResponse = client.execute(hg); //Ejecutamos la petición
             //EntityUtils.consumeQuietly(badResponse.getEntity()); //Workaround to avoid error when executing client.execute next time
             String strContent = inputStreamToString(badResponse.getEntity().getContent()); // Para visualizar el badResponse
@@ -85,16 +107,18 @@ public class Curl {
                     //Creamos la solucion y la mandamos en la cabecera de nuestra verdadera peticion
                     Header solution = md5Auth.authenticate(
                             new UsernamePasswordCredentials(username, password),
-                            new BasicHttpRequest(HttpPost.METHOD_NAME,
+                            new BasicHttpRequest(hg.getMethod(),
                                     new URL(url.toString()).getPath()));
                     Header contentType = getHeader(channel);
-                    HttpPost httpPostFinal = new HttpPost(url.toURI());
+                    HttpUriRequest httpPostFinal = getHttpRequest(method);
                     Header[] headers = new Header[2];
                     headers[0] = contentType;
                     headers[1] = solution;
                     httpPostFinal.setHeaders(headers);
                     //Creada la cabecera, establecemos el body (payload en este caso)
-                    httpPostFinal.setEntity(new StringEntity(body));
+                    if (method.equals(Method.POST) || method.equals(Method.PUT)) {
+                        ((HttpEntityEnclosingRequestBase)httpPostFinal).setEntity(new StringEntity(body));
+                    }
                     //Ejecutamos y recibimos la respuesta.
                     HttpResponse goodResponse = client.execute(httpPostFinal);
                     body = inputStreamToString(goodResponse.getEntity().getContent());
@@ -113,6 +137,20 @@ public class Curl {
             e.printStackTrace();
         }
         return body;
+    }
+
+    private HttpUriRequest getHttpRequest(Method method) throws URISyntaxException {
+        if (method.equals(Method.GET)) {
+            return new HttpGet(url.toURI());
+        } else if (method.equals(Method.POST)) {
+            return new HttpPost(url.toURI());
+        } else if (method.equals(Method.PUT)) {
+            return new HttpPut(url.toURI());
+        } else if (method.equals(Method.DELETE)) {
+            return new HttpDelete(url.toURI());
+        } else {
+            throw new RuntimeException("Invalid Method");
+        }
     }
 
     private BasicHeader getHeader(DMChannel channel) {
