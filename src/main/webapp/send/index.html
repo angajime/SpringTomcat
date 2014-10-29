@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/knockout-3.2.0.js"></script>
+    <script src="js/gyro.js"></script>
+    <script>
+
+        $(document).ready(function(){
+            $("#btn1").click(function(){
+                $.ajax({
+                    url: "../new"
+                })
+                        .done(function( data ) {
+                            $( "#identificador" ).text( data)
+                        })
+                        .fail(function(){
+                            alert("error");
+                        });
+
+                setInterval(function(){
+                    $.ajax({
+                        url: "../post/manuel"
+                    })
+                            .done(function( data ) {
+                                $( "#contador" ).text( data.c)
+                            })
+                            .fail(function(){
+                                alert("error");
+                            });
+                },1000)
+            });
+
+        });
+    </script>
+</head>
+<body>
+
+<p>ID: <strong id="identificador"> - </strong></p>
+<p>Counter: <strong id="contador"> - </strong></p>
+<button id="btn1">Conectar</button>
+
+</body>
+</html>
