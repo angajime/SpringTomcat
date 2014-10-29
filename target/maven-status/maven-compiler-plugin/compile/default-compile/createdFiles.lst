@@ -1,6 +1,7 @@
-hello/ByeController.class
-hello/HelloController.class
-org/kohsuke/randname/RandomNameGenerator.class
-hello/Application.class
-org/kohsuke/randname/Dictionary.class
-hello/Client.class
+org\kohsuke\randname\RandomNameGenerator.class
+hello\ByeController.class
+hello\Client.class
+hello\HelloController.class
+hello\Application.class
+hello\Curl.class
+org\kohsuke\randname\Dictionary.class
