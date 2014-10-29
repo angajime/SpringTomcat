@@ -3,11 +3,6 @@ package hello;
 import org.kohsuke.randname.RandomNameGenerator;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -25,6 +20,11 @@ public class HelloController {
                 "<a href='http://localhost:8080/send/as/"+id+"'>" +
                 "http://localhost:8080/send/as/"+id +
                 "</a>";
+    }
+
+    @RequestMapping("/new")
+    public String newID(){
+        return (new RandomNameGenerator(new Random().nextInt())).next();
     }
 
     @RequestMapping("/follow/{id}")
@@ -45,6 +45,20 @@ public class HelloController {
     @RequestMapping("/get/{urn}")
     @ResponseBody
     public Client get(@PathVariable("urn") String urn) {
+        return new Client(urn, counter++);
+    }
+
+    @RequestMapping("/post/{urn}")
+    @ResponseBody
+    public Client post(@PathVariable("urn") String urn) {
+        //existe el cliente?
+
+        //si:
+        //  introducir sus datos
+
+        //no:
+        //  registrar sus datos
+
         return new Client(urn, counter++);
     }
 
