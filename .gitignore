@@ -1,4 +1,5 @@
 *.class
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
 .DS_Store
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
