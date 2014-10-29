@@ -7,24 +7,5 @@ import java.util.List;
  */
 public class Client {
     private final String id;
-
-    private int c;
-
-    public Client(String id, int c){
-        this.id = id;
-        this.c = c;
-    }
-
-
-    public String getId() {
-        return id;
-    }
-
-    public int getC() {
-        return c;
-    }
-
-    public void setC(int c) {
-        this.c = c;
-    }
+    private Map params;
 }

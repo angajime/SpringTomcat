@@ -3,6 +3,7 @@ package hello;
 import org.kohsuke.randname.RandomNameGenerator;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -50,7 +51,10 @@ public class HelloController {
 
     @RequestMapping("/post/{urn}")
     @ResponseBody
-    public Client post(@PathVariable("urn") String urn) {
+    public Client post(@PathVariable("urn") String urn, @RequestParam Map params) {
+
+
+
         //existe el cliente?
 
         //si:
