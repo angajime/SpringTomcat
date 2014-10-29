@@ -35,20 +35,25 @@ public class HelloController {
         return "Estas siguiendo al pavo: "+id;
     }
 
-    @RequestMapping("/send/as/{id}")
-    public String send(@PathVariable("id") String id ,@RequestBody String data){
-        //TODO: Almacenar en DM
-        return "Hola " +
-                id +"! :) Acabamos de recibir esto de ti: <br>" +
-                data;
-    }
-
+    /**
+     * Pide un dato al DM del cliente elegido.
+     * @param urn: Identificador único del cliente.
+     * @return Devuelve el dato.
+     */
     @RequestMapping("/get/{urn}")
     @ResponseBody
     public Client get(@PathVariable("urn") String urn) {
-        return new Client(urn, counter++);
+        //TODO: Leer datos de dicho cliente
+
+        return new Client(urn, null);
     }
 
+    /**
+     * Envia y registra un payload en el DM.
+     * @param urn: Identificador único del cliente.
+     * @param params: Diccionario de parámetros enviados.
+     * @return Devuelve un ECHO.
+     */
     @RequestMapping("/post/{urn}")
     @ResponseBody
     public Client post(@PathVariable("urn") String urn, @RequestParam Map params) {
@@ -63,7 +68,7 @@ public class HelloController {
         //no:
         //  registrar sus datos
 
-        return new Client(urn, counter++);
+        return new Client(urn, params);
     }
 
     @RequestMapping("/freeboard")
