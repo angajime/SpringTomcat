@@ -59,23 +59,51 @@ public class Curl {
         }
         body = str.toString();
         try {
-            url = new URL("10.95.20.162:8181/" + stringUrl);
+            url = new URL("http://10.95.20.162:8181/" + stringUrl);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * This method executes a POST petition to the DM server and returns an HTML webpage with the result of the petition.
+     * If it returns a HTTP 401 then probably the user and password combination is invalid.
+     * @param channel The channel (Northbound, Southbound...)
+     * @return Answer from server
+     */
+
     public String post(DMChannel channel) {
         return execute(Method.POST, channel);
     }
+
+    /**
+     * This method executes a GET petition to the DM server and returns an HTML webpage with the result of the petition.
+     * If it returns a HTTP 401 then probably the user and password combination is invalid.
+     * @param channel The channel (Northbound, Southbound...)
+     * @return Answer from server
+     */
 
     public String get(DMChannel channel) {
         return execute(Method.GET, channel);
     }
 
+    /**
+     * This method executes a PUT petition to the DM server and returns an HTML webpage with the result of the petition.
+     * If it returns a HTTP 401 then probably the user and password combination is invalid.
+     * @param channel The channel (Northbound, Southbound...)
+     * @return Answer from server
+     */
+
     public String put(DMChannel channel) {
         return execute(Method.PUT, channel);
     }
+
+    /**
+     * This method executes a DELETE petition to the DM server and returns an HTML webpage with the result of the petition.
+     * If it returns a HTTP 401 then probably the user and password combination is invalid.
+     * @param channel The channel (Northbound, Southbound...)
+     * @return Answer from server
+     */
 
     public String delete(DMChannel channel) {
         return execute(Method.DELETE, channel);
@@ -143,6 +171,8 @@ public class Curl {
         if (method.equals(Method.GET)) {
             return new HttpGet(url.toURI());
         } else if (method.equals(Method.POST)) {
+            System.out.println("URL: " + url);
+            System.out.println("URL.toURI: " + url.toURI());
             return new HttpPost(url.toURI());
         } else if (method.equals(Method.PUT)) {
             return new HttpPut(url.toURI());
