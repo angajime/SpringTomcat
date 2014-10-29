@@ -3,11 +3,6 @@ package hello;
 import org.kohsuke.randname.RandomNameGenerator;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -27,15 +22,20 @@ public class HelloController {
                 "</a>";
     }
 
+    @RequestMapping("/new")
+    public String newID(){
+        return (new RandomNameGenerator(new Random().nextInt())).next();
+    }
+
     @RequestMapping("/follow/{id}")
-    public String follow(@PathVariable("id") String id ,@RequestBody String data) {
+    public String follow(@PathVariable("id") String id) {
         //TODO: Leer del DM
         System.out.println("Procesado");
         return "Estas siguiendo al pavo: "+id;
     }
 
     @RequestMapping("/send/as/{id}")
-    public String send(@RequestBody String data){
+    public String send(@PathVariable("id") String id ,@RequestBody String data){
         //TODO: Almacenar en DM
         return "Hola " +
                 id +"! :) Acabamos de recibir esto de ti: <br>" +
@@ -45,6 +45,20 @@ public class HelloController {
     @RequestMapping("/get/{urn}")
     @ResponseBody
     public Client get(@PathVariable("urn") String urn) {
+        return new Client(urn, counter++);
+    }
+
+    @RequestMapping("/post/{urn}")
+    @ResponseBody
+    public Client post(@PathVariable("urn") String urn) {
+        //existe el cliente?
+
+        //si:
+        //  introducir sus datos
+
+        //no:
+        //  registrar sus datos
+
         return new Client(urn, counter++);
     }
 
