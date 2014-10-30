@@ -29,7 +29,7 @@
                     var mouse= JSON.parse('{ "mouse" :' + JSON.stringify(currentMousePos) + '}');
                     $.ajax({
                         url: "../post/"+nombre,
-                        data: mouse,
+                        data: JSON.stringify(mouse),
                         type: "POST"
                     })
                             .done(function( data ) {
