@@ -26,4 +26,12 @@ public class Client {
     public void setParams(Map params) {
         this.params = params;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id='" + id + '\'' +
+                ", params=" + params +
+                '}';
+    }
 }

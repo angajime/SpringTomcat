@@ -1,15 +1,18 @@
 package hello;
 
 import org.kohsuke.randname.RandomNameGenerator;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 @RestController
 public class HelloController {
 
-    private int counter = 0;
+    List<Client> listaClientes = new LinkedList<Client>();
 
     @RequestMapping("/")
     public String index() {
@@ -42,10 +45,15 @@ public class HelloController {
      */
     @RequestMapping("/get/{urn}")
     @ResponseBody
-    public Client get(@PathVariable("urn") String urn) {
-        //TODO: Leer datos de dicho cliente
+    public List<Client> get(@PathVariable("urn") String urn) {
+        //TODO: Leer datos de dicho cliente del DM
+        List<Client> rtn = new LinkedList<Client>();
 
-        return new Client(urn, null);
+        for(Client c : listaClientes)
+            if(c.getId().equals(urn))
+                rtn.add(c);
+
+        return rtn;
     }
 
     /**
@@ -57,8 +65,9 @@ public class HelloController {
     @RequestMapping("/post/{urn}")
     @ResponseBody
     public Client post(@PathVariable("urn") String urn, @RequestParam Map params) {
-
-
+        Client client = new Client(urn, params);
+        listaClientes.add(client);
+        System.out.println(client.toString());
 
         //existe el cliente?
 
@@ -68,7 +77,7 @@ public class HelloController {
         //no:
         //  registrar sus datos
 
-        return new Client(urn, params);
+        return client;
     }
 
     @RequestMapping("/freeboard")
