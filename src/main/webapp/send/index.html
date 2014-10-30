@@ -15,7 +15,7 @@
                             $( "#identificador" ).text(data);
                         })
                         .fail(function(){
-                            alert("error");
+                            $( "#identificador" ).text("error");
                         });
                 var currentMousePos = { x: -1, y: -1 };
                 setInterval(function(){
@@ -31,7 +31,7 @@
                                 $( "#contador" ).text( JSON.stringify(currentMousePos))
                             })
                             .fail(function(){
-                                alert("error");
+                                $( "#contador" ).text("error");
                             });
                 },1000)
             });
