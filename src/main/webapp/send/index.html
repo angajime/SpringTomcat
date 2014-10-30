@@ -29,11 +29,11 @@
                     var mouse= JSON.parse('{ "mouse" :' + JSON.stringify(currentMousePos) + '}');
                     $.ajax({
                         url: "../post/"+nombre,
-                        data: JSON.stringify(mouse),
+                        data: mouse,
                         type: "POST"
                     })
                             .done(function( data ) {
-                                $("#contador").text( (JSON.stringify(mouse,undefined,4)))
+                                $("#contador").text( "\n"+(JSON.stringify(mouse,undefined,4)))
                             })
                             .fail(function(){
                                 $( "#contador" ).text("error");
