@@ -4,14 +4,15 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="js/gyro.js"></script>
     <script>
-
+        var nombre;
         $(document).ready(function(){
             $("#btn1").click(function(){
                 $.ajax({
                     url: "../new"
                 })
                         .done(function( data ) {
-                            $( "#identificador" ).text( data)
+                            nombre = data;
+                            $( "#identificador" ).text(data);
                         })
                         .fail(function(){
                             alert("error");
@@ -23,7 +24,7 @@
                         currentMousePos.y = event.pageY;
                     });
                     $.ajax({
-                        url: "../post/manuel",
+                        url: "../post/"+nombre,
                         data: currentMousePos
                     })
                             .done(function( data ) {
