@@ -171,8 +171,6 @@ public class Curl {
         if (method.equals(Method.GET)) {
             return new HttpGet(url.toURI());
         } else if (method.equals(Method.POST)) {
-            System.out.println("URL: " + url);
-            System.out.println("URL.toURI: " + url.toURI());
             return new HttpPost(url.toURI());
         } else if (method.equals(Method.PUT)) {
             return new HttpPut(url.toURI());
