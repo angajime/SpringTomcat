@@ -1,7 +1,6 @@
 package hello;
 
 import org.kohsuke.randname.RandomNameGenerator;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -27,15 +26,8 @@ public class HelloController {
     }
 
     @RequestMapping("/new")
-    public String newID(){
+    public String newID() {
         return (new RandomNameGenerator(new Random().nextInt())).next();
-    }
-
-    @RequestMapping("/follow/{id}")
-    public String follow(@PathVariable("id") String id) {
-        //TODO: Leer del DM
-        System.out.println("Procesado");
-        return "Estas siguiendo al pavo: "+id;
     }
 
     /**
@@ -55,6 +47,18 @@ public class HelloController {
 
         return rtn;
     }
+    
+    @RequestMapping("/follow/{urn}")
+    @ResponseBody
+    public Client getLast(@PathVariable("urn") String urn){
+        Client rtn = null;
+
+        for(Client c : listaClientes)
+            if(c.getId().equals(urn))
+                rtn = c;
+
+        return rtn;
+    }
 
     /**
      * Envia y registra un payload en el DM.
@@ -62,7 +66,7 @@ public class HelloController {
      * @param params: Diccionario de parámetros enviados.
      * @return Devuelve un ECHO.
      */
-    @RequestMapping("/post/{urn}")
+    @RequestMapping(value="/post/{urn}",method = RequestMethod.POST)
     @ResponseBody
     public Client post(@PathVariable("urn") String urn, @RequestParam Map params) {
         Client client = new Client(urn, params);
@@ -83,6 +87,11 @@ public class HelloController {
     @RequestMapping("/freeboard")
     public String fb(){
         return "<script>window.location.assign(\"/index.html\")</script>";
+    }
+
+    @RequestMapping("/send")
+    public String sendJS(){
+        return "<script>window.location.assign(\"/send/index.html\")</script>";
     }
 
 }

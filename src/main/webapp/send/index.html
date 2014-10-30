@@ -25,7 +25,8 @@
                     });
                     $.ajax({
                         url: "../post/"+nombre,
-                        data: currentMousePos
+                        data: currentMousePos,
+                        type: "POST"
                     })
                             .done(function( data ) {
                                 $( "#contador" ).text( JSON.stringify(currentMousePos))
