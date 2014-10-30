@@ -17,13 +17,18 @@
                         .fail(function(){
                             alert("error");
                         });
-
+                var currentMousePos = { x: -1, y: -1 };
                 setInterval(function(){
+                    $(document).mousemove(function(event) {
+                        currentMousePos.x = event.pageX;
+                        currentMousePos.y = event.pageY;
+                    });
                     $.ajax({
-                        url: "../post/manuel"
+                        url: "../post/manuel",
+                        data: currentMousePos
                     })
                             .done(function( data ) {
-                                $( "#contador" ).text( data.c)
+                                $( "#contador" ).text( JSON.stringify(currentMousePos))
                             })
                             .fail(function(){
                                 alert("error");
