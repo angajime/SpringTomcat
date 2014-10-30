@@ -2,10 +2,12 @@
 <html>
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
     <script src="js/gyro.js"></script>
     <script>
         var nombre;
         $(document).ready(function(){
+
             $("#btn1").click(function(){
                 $.ajax({
                     url: "../new"
@@ -19,17 +21,19 @@
                         });
                 var currentMousePos = { x: -1, y: -1 };
                 setInterval(function(){
+
                     $(document).mousemove(function(event) {
                         currentMousePos.x = event.pageX;
                         currentMousePos.y = event.pageY;
                     });
+                    var mouse= JSON.parse('{ "mouse" :' + JSON.stringify(currentMousePos) + '}');
                     $.ajax({
                         url: "../post/"+nombre,
-                        data: currentMousePos,
+                        data: mouse,
                         type: "POST"
                     })
                             .done(function( data ) {
-                                $( "#contador" ).text( JSON.stringify(currentMousePos))
+                                $("#contador").text( (JSON.stringify(mouse,undefined,4)))
                             })
                             .fail(function(){
                                 $( "#contador" ).text("error");
@@ -43,7 +47,8 @@
 <body>
 
 <p>ID: <strong id="identificador"> - </strong></p>
-<p>Counter: <strong id="contador"> - </strong></p>
+<pre><code class="html"><p>Counter: <strong id="contador"> - </strong></p></code></pre>
+
 <button id="btn1">Conectar</button>
 
 </body>
