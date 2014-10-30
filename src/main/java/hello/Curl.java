@@ -149,7 +149,11 @@ public class Curl {
                     }
                     //Ejecutamos y recibimos la respuesta.
                     HttpResponse goodResponse = client.execute(httpPostFinal);
-                    body = inputStreamToString(goodResponse.getEntity().getContent());
+                    if (!method.equals(Method.DELETE)) {
+                        body = inputStreamToString(goodResponse.getEntity().getContent());
+                    } else {
+                        body = "";
+                    }
                 }
             }
 
