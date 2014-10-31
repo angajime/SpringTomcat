@@ -1,7 +1,6 @@
-package hello;
+package curl;
 
 import org.apache.http.Header;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthenticationException;
