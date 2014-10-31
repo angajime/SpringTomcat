@@ -1,0 +1,4 @@
+10-31 12:47:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "CUSTOMERS" no encontrada
+Table "CUSTOMERS" not found; SQL statement:
+INSERT INTO customers(first_name,last_name) values(?,?) [42102-176]

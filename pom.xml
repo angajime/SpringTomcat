@@ -42,6 +42,14 @@
             <version>4.3.5</version>
         </dependency>
         <!-- end::actuator[] -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
     </dependencies>
 
     <properties>
