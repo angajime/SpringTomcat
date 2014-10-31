@@ -35,7 +35,7 @@ public class HelloController {
      * @param urn: Identificador único del cliente.
      * @return Devuelve el dato.
      */
-    @RequestMapping("/get/{urn}")
+    @RequestMapping(value={"/get/{urn}","/every/{urn}"})
     @ResponseBody
     public List<Client> get(@PathVariable("urn") String urn) {
         //TODO: Leer datos de dicho cliente del DM
@@ -48,7 +48,7 @@ public class HelloController {
         return rtn;
     }
     
-    @RequestMapping("/follow/{urn}")
+    @RequestMapping(value={"/follow/{urn}","/latest/for/{urn}"})
     @ResponseBody
     public Client getLast(@PathVariable("urn") String urn){
         Client rtn = null;
