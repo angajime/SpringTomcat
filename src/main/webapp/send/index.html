@@ -3,6 +3,7 @@
 <head>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<<<<<<< HEAD
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/bootstrap.icon-large.min.css" rel="stylesheet">
     <!-- Latest compiled and minified JavaScript -->
@@ -10,14 +11,39 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
     <script src="js/knockout-3.2.0.js"></script>
+=======
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+>>>>>>> frontend-dev
     <script src="js/gyro.js"></script>
 
     <script>
         var nombre;
+<<<<<<< HEAD
         $(document).ready(function () {
             var interval;
 
             $("#try-it").click(function () {
+=======
+        var lat;
+        var lng;
+        var onSuccess = function(position) {
+            lat=position.coords.latitude;
+            lng=position.coords.longitude;
+        };
+
+        // onError Callback receives a PositionError object
+        //
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' +
+                    'message: ' + error.message + '\n');
+        }
+
+
+
+        $(document).ready(function(){
+
+            $("#btn1").click(function(){
+>>>>>>> frontend-dev
                 $.ajax({
                     url: "../new"
                 })
@@ -26,19 +52,42 @@
                             $("#thing-link").text("http://localhost:8080/follow/"+nombre);
                             $("#thing-name").text(data);
                         })
+<<<<<<< HEAD
                         .fail(function () {
                             alert("error");
+=======
+                        .fail(function(){
+                            $( "#identificador" ).text("error");
+>>>>>>> frontend-dev
                         });
                 $("#try-it").text("Stop Sharing");
                 $("#try-box").show("slow");
 
                 var currentMousePos = { x: -1, y: -1 };
+<<<<<<< HEAD
                 interval = setInterval(function () {
                     $(document).mousemove(function (event) {
+=======
+                setInterval(function(){
+                    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+                    $(document).mousemove(function(event) {
+>>>>>>> frontend-dev
                         currentMousePos.x = event.pageX;
                         currentMousePos.y = event.pageY;
                     });
+                    if(lat!=undefined && lng!=undefined){
+
+                        var mouse= JSON.parse(JSON.stringify(currentMousePos));
+                        var geolocation = {latitude: lat, longitude: lng};
+                        var json = {mouse:mouse, location:geolocation};
+                    }
+                    else{
+                        var mouse= JSON.parse(JSON.stringify(currentMousePos));
+                        var json = {mouse:mouse};
+                    }
+
                     $.ajax({
+<<<<<<< HEAD
                         url: "../post/" + nombre,
                         data: currentMousePos,
                         type: "POST"
@@ -48,6 +97,17 @@
                             })
                             .fail(function () {
                                 alert("error");
+=======
+                        url: "../post/"+nombre,
+                        data: json,
+                        type: "POST"
+                    })
+                            .done(function( data ) {
+                                $("#contador").text( "\n"+(JSON.stringify(json,undefined,4)))
+                            })
+                            .fail(function(){
+                                $( "#contador" ).text("error");
+>>>>>>> frontend-dev
                             });
                 }, 1000)
 
@@ -57,11 +117,15 @@
                 clearInterval(interval);
             });
 
+
         });
+
+
     </script>
 </head>
 <body>
 
+<<<<<<< HEAD
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -122,6 +186,13 @@
                 <img class="img-responsive" src="assets/img/connected.png" alt="">
             </div>
             <!-- /col-lg-6 -->
+=======
+<p>ID: <strong id="identificador"> - </strong></p>
+<pre><code class="html"><p>Counter: <strong id="contador"> - </strong></p></code></pre>
+<div id="example"></div>
+<div id="features"></div>
+<button id="btn1">Conectar</button>
+>>>>>>> frontend-dev
 
         </div>
         <!-- /row -->

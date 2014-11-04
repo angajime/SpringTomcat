@@ -4,6 +4,8 @@ target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.l
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+target/
+
 *.db
 
 # Package Files #
