@@ -4,8 +4,25 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
     <script src="js/gyro.js"></script>
+
     <script>
         var nombre;
+        var lat;
+        var lng;
+        var onSuccess = function(position) {
+            lat=position.coords.latitude;
+            lng=position.coords.longitude;
+        };
+
+        // onError Callback receives a PositionError object
+        //
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' +
+                    'message: ' + error.message + '\n');
+        }
+
+
+
         $(document).ready(function(){
 
             $("#btn1").click(function(){
@@ -21,19 +38,29 @@
                         });
                 var currentMousePos = { x: -1, y: -1 };
                 setInterval(function(){
-
+                    navigator.geolocation.getCurrentPosition(onSuccess, onError);
                     $(document).mousemove(function(event) {
                         currentMousePos.x = event.pageX;
                         currentMousePos.y = event.pageY;
                     });
-                    var mouse= JSON.parse('{ "mouse" :' + JSON.stringify(currentMousePos) + '}');
+                    if(lat!=undefined && lng!=undefined){
+
+                        var mouse= JSON.parse(JSON.stringify(currentMousePos));
+                        var geolocation = {latitude: lat, longitude: lng};
+                        var json = {mouse:mouse, location:geolocation};
+                    }
+                    else{
+                        var mouse= JSON.parse(JSON.stringify(currentMousePos));
+                        var json = {mouse:mouse};
+                    }
+
                     $.ajax({
                         url: "../post/"+nombre,
-                        data: mouse,
+                        data: json,
                         type: "POST"
                     })
                             .done(function( data ) {
-                                $("#contador").text( "\n"+(JSON.stringify(mouse,undefined,4)))
+                                $("#contador").text( "\n"+(JSON.stringify(json,undefined,4)))
                             })
                             .fail(function(){
                                 $( "#contador" ).text("error");
@@ -41,14 +68,18 @@
                 },1000)
             });
 
+
         });
+
+
     </script>
 </head>
 <body>
 
 <p>ID: <strong id="identificador"> - </strong></p>
 <pre><code class="html"><p>Counter: <strong id="contador"> - </strong></p></code></pre>
-
+<div id="example"></div>
+<div id="features"></div>
 <button id="btn1">Conectar</button>
 
 </body>
