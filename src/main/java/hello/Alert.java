@@ -10,14 +10,29 @@ public class Alert {
     private String urn, resource, comparator;
     private Double value;
     private List<String> recipients;
+    private Boolean active;
 
-    public Alert(long id, String urn, String resource, String comparator, Double value, List<String> recipients) {
+    @Override
+    public String toString() {
+        return "Alert{" +
+                "id=" + id +
+                ", urn='" + urn + '\'' +
+                ", resource='" + resource + '\'' +
+                ", comparator='" + comparator + '\'' +
+                ", value=" + value +
+                ", recipients=" + recipients +
+                ", active=" + active +
+                '}';
+    }
+
+    public Alert(long id, String urn, String resource, String comparator, Double value, List<String> recipients, Boolean active) {
         this.id = id;
         this.urn = urn;
         this.resource = resource;
         this.comparator = comparator;
         this.value = value;
         this.recipients = recipients;
+        this.active = active;
     }
 
     public long getId() {
@@ -68,15 +83,11 @@ public class Alert {
         this.recipients = recipients;
     }
 
-    @Override
-    public String toString() {
-        return "Alert{" +
-                "id=" + id +
-                ", urn='" + urn + '\'' +
-                ", resource='" + resource + '\'' +
-                ", comparator='" + comparator + '\'' +
-                ", value=" + value +
-                ", recipients=" + recipients +
-                '}';
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

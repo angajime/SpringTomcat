@@ -1,20 +1,30 @@
 package hello;
 
 import org.kohsuke.randname.RandomNameGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.Future;
 
 @RestController
+@EnableAsync
 public class HelloController {
+
+    @Autowired
+    AlertLookupService alertLookupService;
+
+    Future<List<Alert>> rtn;
 
     List<Client> listaClientes = new LinkedList<Client>();
     SimpleDriverDataSource dataSource;
+    JdbcTemplate jdbcTemplate;
 
     @RequestMapping("/")
     public String index() {
@@ -86,6 +96,9 @@ public class HelloController {
         //no:
         //  registrar sus datos
 
+        //Actualizar alertas
+        rtn = alertLookupService.findAlert(jdbcTemplate,urn,params);
+
         return client;
     }
 
@@ -117,7 +130,7 @@ public class HelloController {
         dataSource.setUrl("jdbc:h2:mem");
         dataSource.setPassword("");
 
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
         jdbcTemplate.execute("drop table alerts if exists");
         jdbcTemplate.execute("create table alerts(" +
@@ -126,32 +139,35 @@ public class HelloController {
                 "resource varchar(255)," +
                 "comparator varchar(255)," +
                 "value number," +
-                "recipient varchar(255))");
-/*
-        String[] names = "John Woo;Jeff Dean;Josh Bloch;Josh Long".split(";");
-        for (String fullname : names) {
-            String[] name = fullname.split(" ");
-            System.out.printf("Inserting customer record for %s %s\n", name[0], name[1]);
-            jdbcTemplate.update(
-                    "INSERT INTO alerts(first_name,last_name) values(?,?)",
-                    name[0], name[1]);
-        }
+                "recipient varchar(255)," +
+                "active boolean)");
 
-        System.out.println("Querying for customer records where first_name = 'Josh':");
+        return "OK";
+    }
+
+    @RequestMapping("/listdb")
+    public List<Alert> listdb(){
+
         List<Alert> results = jdbcTemplate.query(
-                "select * from alerts where first_name = ?", new Object[] { "Josh" },
+                "select * from alerts",
                 new RowMapper<Alert>() {
+                    List<String> ls = new LinkedList<String>();
                     @Override
                     public Alert mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        return new Alert(0,null,null,null,null,null);
+                        ls.add(rs.getString("recipient"));
+                        return new Alert(rs.getLong("id"),
+                                rs.getString("urn"),
+                                rs.getString("resource"),
+                                rs.getString("comparator"),
+                                rs.getDouble("value"),
+                                ls,
+                                rs.getBoolean("active")
+                                );
                     }
-                });
+                }
+        );
 
-        for (Alert customer : results) {
-            System.out.println(customer);
-        }
-*/
-        return "OK";
+        return results;
     }
 
     @RequestMapping("/freeboard")

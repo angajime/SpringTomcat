@@ -1,0 +1,422 @@
+/*
+ * Author: Carlos Alvarez
+ * URL: http://alvarez.is
+ *
+ * Project Name: FLATTY - Free Bootstrap 3 Theme
+ * Version: 1.0
+ * URL: http://blacktie.co
+ */
+
+@font-face
+{
+    font-family : 'roboto';
+    src         : url('/assets/fonts/Roboto-Regular-webfont.eot');
+    src         : url('/assets/fonts/Roboto-Regular-webfont.eot?#iefix') format('eot'), url('/assets/fonts/Roboto-Regular-webfont.svg') format('svg'), url('/assets/fonts/Roboto-Regular-webfont.woff') format('woff'), url('/assets/fonts/Roboto-Regular-webfont.ttf') format('truetype');
+    font-weight : 400;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+    @font-face
+    {
+        font-family : 'roboto';
+        src         : url('/assets/fonts/Roboto-Regular-webfont.svg') format('svg');
+        font-weight : 400;
+    }
+}
+
+@font-face
+{
+    font-family : 'roboto';
+    src         : url('/assets/fonts/Roboto-Light-webfont.eot');
+    src         : url('/assets/fonts/Roboto-Light-webfont.eot?#iefix') format('eot'), url('/assets/fonts/Roboto-Light-webfont.svg') format('svg'), url('/assets/fonts/Roboto-Light-webfont.woff') format('woff'), url('/assets/fonts/Roboto-Light-webfont.ttf') format('truetype');
+    font-weight : 300;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+    @font-face
+    {
+        font-family : 'roboto';
+        src         : url('/assets/fonts/Roboto-Light-webfont.svg') format('svg');
+        font-weight : 300;
+    }
+}
+
+body {
+  background-color: #f2f2f2;
+    font-family: 'roboto', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #555;
+
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Titles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'roboto', sans-serif;
+    font-weight: 300;
+    color: #333;
+}
+
+h1 {
+    font-size: 40px;
+    letter-spacing: -1px;
+}
+
+h3 {
+    color: #95a5a6;
+    font-weight: 400;
+}
+
+h4 {
+    color: #95a5a6;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+/* Paragraph & Typographic */
+p {
+    line-height: 28px;
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+.centered {
+    text-align: center;
+}
+
+/* Links */
+a {
+    color: #3498db;
+    word-wrap: break-word;
+}
+
+a:hover,
+a:focus {
+    color: #7b7b7b;
+    text-decoration: none;
+    outline: 0;
+}
+
+a:before,
+a:after {
+
+}
+
+ hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.navbar-default {
+    background-color: #3498db;
+    border-color: transparent;
+}
+
+.brand-logo
+{
+    font-family: 'Helvetica-Neue', 'Helvetica', 'Arial', sans-serif;
+    font-weight: 900;
+    padding: 0.1em 0.72em;
+    line-height: 1.7em;
+    border: solid 0.2em #fff;
+    letter-spacing: -1px;
+    font-size: 18px;
+    margin: 0;
+    display: inline-block;
+    color: white;
+}
+
+a.brand-logo:hover
+{
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+
+.navbar > .container .brand-logo
+{
+    margin-top: 5px;
+}
+
+/* Helpers */
+
+.mt {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.ms
+{
+    margin-top    : 25px;
+    margin-bottom : 25px;
+}
+
+.form-control {
+    height: 38px;
+    font-size: 16px;
+    width: 280px;
+}
+
+i {
+    margin: 8px;
+    color: #3498db; 
+}
+
+h3.sub-section
+{
+    color: #333;
+}
+
+/* HeaderWrap */
+#headerwrap {
+    /* background: url(../img/bg01.jpg) no-repeat center top; */
+    background-color: #3498db;
+    color: white;
+    margin-top: -20px;
+    padding-top:100px;
+    background-attachment: relative;
+    background-position: center center;
+    width: 100%;
+    
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    -o-background-size: 100%;
+    background-size: 100%;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#headerwrap h1,
+#headerwrap h2,
+#headerwrap h3,
+#headerwrap h4
+{
+    color: white;
+}
+
+#headerwrap h1 {
+    margin-bottom: 15px;
+    font-size: 45px;
+    font-weight: 300;
+    letter-spacing: -2px;
+}
+
+#try-box
+{
+    color: white;
+    margin-top: 17px;
+    margin-bottom: 50px;
+}
+
+#try-box div
+{
+    margin-bottom: 10px;
+}
+
+#thing-name
+{
+    font-weight: bold;
+    white-space : nowrap;
+}
+
+a#thing-link
+{
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+a:hover#thing-link
+{
+    color: white;
+}
+
+.row pre
+{
+    margin: 0px;
+}
+
+.attribution
+{
+    font-size: 11px;
+}
+
+.try-col
+{
+    margin-bottom: 20px;
+}
+
+label
+{
+    font-weight: normal;
+}
+
+.btn
+{
+    font-weight: 400;
+}
+
+.btn-lg
+{
+    padding : 8px 16px 5px 16px;
+}
+
+.footer
+{
+    margin-top: 20px;
+}
+
+#signin-box
+{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+a.btn
+{
+    -webkit-font-smoothing: auto;
+}
+
+#signin-alert
+{
+    height: 25px;
+    font-weight: bold;
+}
+
+#forgot-password
+{
+    color: white;
+}
+
+#forgot-password:hover
+{
+    text-decoration: underline;
+}
+
+.alert
+{
+    padding : 8px;
+}
+
+.terms
+{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.terms > li
+{
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+.faq-question
+{
+    font-weight: bold;
+    font-size: larger;
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+table.thing-list
+{
+    width: 100%;
+    margin-top: 25px;
+}
+
+table.thing-list thead td
+{
+    font-weight: bold;
+}
+
+table.thing-list td
+{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+table.thing-list td.thing-keywords
+{
+    width: 33%;
+}
+
+table.thing-list td.thing-name
+{
+    width: 33%;
+}
+
+table.thing-list td.thing-time
+{
+    width: 33%;
+    text-align: right;
+}
+
+table.thing-list tr
+{
+    border-bottom: #BBB 1px solid;
+}
+
+.api-call-text
+{
+    font-size: 90%;
+    color: #c7254e;
+    border-radius: 4px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+code
+{
+    background-color: transparent;
+}
+
+.jqstooltip {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+@media (max-width: 630px)
+{
+    .api-call-text
+    {
+        word-wrap: break-word;
+    }
+
+    #headerwrap
+    {
+        padding-top:60px;
+    }
+
+    #headerwrap h1
+    {
+        font-size: 37px;
+    }
+
+    .col-lg-9 pre
+    {
+        font-size : 9px;
+    }
+
+    h1
+    {
+        font-size: 25px;
+    }
+
+    h3
+    {
+        font-size: 20px;
+    }
+}

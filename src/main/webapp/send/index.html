@@ -1,41 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.icon-large.min.css" rel="stylesheet">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
     <script src="js/knockout-3.2.0.js"></script>
     <script src="js/gyro.js"></script>
+
     <script>
         var nombre;
-        $(document).ready(function(){
-            $("#btn1").click(function(){
+        $(document).ready(function () {
+            var interval;
+
+            $("#try-it").click(function () {
                 $.ajax({
                     url: "../new"
                 })
-                        .done(function( data ) {
+                        .done(function (data) {
                             nombre = data;
-                            $( "#identificador" ).text(data);
+                            $("#thing-link").text("http://localhost:8080/follow/"+nombre);
+                            $("#thing-name").text(data);
                         })
-                        .fail(function(){
+                        .fail(function () {
                             alert("error");
                         });
+                $("#try-it").text("Stop Sharing");
+                $("#try-box").show("slow");
+
                 var currentMousePos = { x: -1, y: -1 };
-                setInterval(function(){
-                    $(document).mousemove(function(event) {
+                interval = setInterval(function () {
+                    $(document).mousemove(function (event) {
                         currentMousePos.x = event.pageX;
                         currentMousePos.y = event.pageY;
                     });
                     $.ajax({
-                        url: "../post/"+nombre,
+                        url: "../post/" + nombre,
                         data: currentMousePos,
                         type: "POST"
                     })
-                            .done(function( data ) {
-                                $( "#contador" ).text( JSON.stringify(currentMousePos))
+                            .done(function (data) {
+                                $("#thing-data").text(JSON.stringify(currentMousePos,undefined, 4))
                             })
-                            .fail(function(){
+                            .fail(function () {
                                 alert("error");
                             });
-                },1000)
+                }, 1000)
+
+            });
+
+            $("#btn2").click(function () {
+                clearInterval(interval);
             });
 
         });
@@ -43,9 +62,72 @@
 </head>
 <body>
 
-<p>ID: <strong id="identificador"> - </strong></p>
-<p>Counter: <strong id="contador"> - </strong></p>
-<button id="btn1">Conectar</button>
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand-logo" href="/">dmeet.io</a>
+        </div>
+        <!--//TODO: Colocar enlaces utiles-->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://dweet.io/play/">Play</a></li>
+                <li><a href="https://dweet.io/locks">Lock</a></li>
+                <li><a href="/see">Discover</a></li>
+                <li><a href="/faq">FAQ</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+<!--
+<div id="headerwrap">
+<div class="col-md-5 col-md-offset-1" style="margin-top:50px">
+    <p>ID: <strong id="identificador"> - </strong></p>
+    <p>Counter: <strong id="contador"> - </strong></p>
+    <button id="btn0">Conectar</button>
+    <button style="display:none" id="btn1">Iniciar</button>
+    <button style="display:none" id="btn2">Pausar</button>
+</div>
+-->
 
+<div id="headerwrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 try-col">
+                <h1>Share your thing &mdash;<br>like it ain't no thang.</h1>
+                <button id="try-it" class="btn btn-warning btn-lg">Try It Now</button>
+                <div style="margin-top: 15px;font-size:13px;">( Hint: For BIG fun, try it on your smartphone or tablet )
+                </div>
+                <div id="try-box" style="display:none">
+                    <div>We went ahead and named your thing,
+                        <span id="thing-name" class="thing-name"></span>, but you can always call it something
+                        different.
+                    </div>
+                    <div>You are currently dweeting the following information to dmeet.io:</div>
+                    <div>
+                        <pre><code id="thing-data"></code></pre>
+                    </div>
+                    <div>Now, anyone (or thing) can follow your thing at:</div>
+                    <div><a target="_blank" id="thing-link"></a></div>
+                    <div>See how easy that was?</div>
+                </div>
+            </div>
+            <!-- /col-lg-6 -->
+            <div class="col-lg-7">
+                <img class="img-responsive" src="assets/img/connected.png" alt="">
+            </div>
+            <!-- /col-lg-6 -->
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /headerwrap -->
 </body>
 </html>

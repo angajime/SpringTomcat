@@ -1,8 +1,10 @@
 /www/SpringTomcat/src/main/java/org/kohsuke/randname/Dictionary.java
 /www/SpringTomcat/src/main/java/hello/ByeController.java
+/www/SpringTomcat/src/main/java/hello/Alert.java
 /www/SpringTomcat/src/main/java/hello/Client.java
 /www/SpringTomcat/src/main/java/hello/DMChannel.java
 /www/SpringTomcat/src/main/java/org/kohsuke/randname/RandomNameGenerator.java
 /www/SpringTomcat/src/main/java/hello/HelloController.java
 /www/SpringTomcat/src/main/java/hello/Application.java
+/www/SpringTomcat/src/main/java/hello/AlertLookupService.java
 /www/SpringTomcat/src/main/java/hello/Curl.java
