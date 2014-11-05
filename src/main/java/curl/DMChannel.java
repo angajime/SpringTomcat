@@ -1,4 +1,4 @@
-package hello;
+package curl;
 
 /**
  * Created by Juanlu on 28/10/14.

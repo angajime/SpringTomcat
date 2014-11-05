@@ -1,7 +1,6 @@
-package hello;
+package curl;
 
 import org.apache.http.Header;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthenticationException;
@@ -29,6 +28,7 @@ public class Curl {
     private URL url;
     private String body;
     private String hdr = "WWW-Authenticate";
+    private int lastStatusCode;
 
     private enum Method {
         GET,
@@ -36,6 +36,72 @@ public class Curl {
         PUT,
         DELETE
     }
+
+    public static String send(String username, String password, String payload) {
+        Curl provCurl = new Curl("m2m/southbound/dataStore", username, password, payload);
+        return provCurl.post(DMChannel.Southbound);
+    }
+
+    // This is not assured to be functional
+    public static String receive(String username, String password, String deviceGatewayName) {
+        String enterpriseCustomer = "enterpriseCustomerCurlTest";
+        Curl curl = new Curl("m2m/dataServices/ec/" + enterpriseCustomer + "?gatewaySpec=" + deviceGatewayName, username, password);
+        return curl.get(DMChannel.Northbound);
+    }
+
+    public static String add(String username, String password, String type, String... args) {
+        Curl curl = new Curl("m2m/provisioning/LL/" + type, username, password, args);
+        return curl.post(DMChannel.Provisioning);
+    }
+
+//    private static String add(String username, String password, String deviceGW, String sensor, String resource) {
+//        String operatorID = "opIDCurlTest";
+//        String deviceGWSpecURN = "deviceGWSpecCurlTest";
+//        String deviceGWGURN = "deviceGWGCurlTest";
+//        String connectivityServiceURN = "connectivityServiceCurlTest";
+//        String devicePassword = "Password1";
+//        String deviceSerialNumber = "SN1234";
+//        String deviceVendorNumber = "VN1234";
+//        String sensorSpecURN = "sensorSpecCurlTest";
+//        String sensorSerialNumber = "SNS1234";
+//        String resourceSpecURN = "resourceSpecCurlTest";
+//        String resourceAddress = "resourceAddress";
+//        String resourceSetURN = "resourceSetCurlTest";
+//
+//        Curl curlDeviceGW = new Curl("m2m/provisioning/LL/deviceGateway", username, password,
+//                "operatorIdentifier=" + operatorID,
+//                "deviceGatewaySpecificationURN=" + deviceGWSpecURN,
+//                "deviceGatewayGroupURN=" + deviceGWGURN,
+//                "deviceStatus=active",
+//                "connectivityServiceURN=" + connectivityServiceURN,
+//                "password=" + devicePassword,
+//                "serialNumber=" + deviceSerialNumber,
+//                "vendorNumber=" + deviceVendorNumber,
+//                "name=" + deviceGW,
+//                "deviceGatewayURN=device" + deviceGW);
+//
+//        Curl curlSensor = new Curl("m2m/provisioning/LL/sensor", username, password,
+//                "operatorIdentifier=" + operatorID,
+//                "sensorSpecificationURN=" + sensorSpecURN,
+//                "parentGatewayURN=device" + deviceGW,
+//                "sensorURN=sensor" + sensor,
+//                "name=" + sensor,
+//                "deviceStatus=active",
+//                "serialNumber=" + sensorSerialNumber);
+//        Curl curlResource = new Curl("m2m/provisioning/LL/resource", username, password,
+//                "operatorIdentifier=" + operatorID,
+//                "resourceSpecificationURN=" + resourceSpecURN,
+//                "sensorURN=sensor" + sensor,
+//                "resourceURN=resource" + resource,
+//                "physicalAddress=" + resourceAddress,
+//                "resourceSetURN=" + resourceSetURN);
+//
+//        System.out.println("DEBUG: DEVICE:\n" + curlDeviceGW.post(DMChannel.Provisioning));
+//        System.out.println("DEBUG: SENSOR:\n" + curlSensor.post(DMChannel.Provisioning));
+//        System.out.println("DEBUG: RESOURCE:\n" + curlResource.post(DMChannel.Provisioning));
+//
+//        return "Provisioning done. Unknown result.";
+//    }
 
     /**
      * This is the constructor for the Curl class. In this constructor you must provide the URL for the DM service, the username and user password
@@ -47,7 +113,7 @@ public class Curl {
      * @param args The arguments for the petition
      */
 
-    public Curl(String stringUrl, String name, String pass, String... args) {
+    private Curl(String stringUrl, String name, String pass, String... args) {
         username = name;
         password = pass;
         StringBuilder str = new StringBuilder();
@@ -72,7 +138,7 @@ public class Curl {
      * @return Answer from server
      */
 
-    public String post(DMChannel channel) {
+    private String post(DMChannel channel) {
         return execute(Method.POST, channel);
     }
 
@@ -83,7 +149,7 @@ public class Curl {
      * @return Answer from server
      */
 
-    public String get(DMChannel channel) {
+    private String get(DMChannel channel) {
         return execute(Method.GET, channel);
     }
 
@@ -94,7 +160,7 @@ public class Curl {
      * @return Answer from server
      */
 
-    public String put(DMChannel channel) {
+    private String put(DMChannel channel) {
         return execute(Method.PUT, channel);
     }
 
@@ -105,7 +171,7 @@ public class Curl {
      * @return Answer from server
      */
 
-    public String delete(DMChannel channel) {
+    private String delete(DMChannel channel) {
         return execute(Method.DELETE, channel);
     }
 
@@ -149,7 +215,12 @@ public class Curl {
                     }
                     //Ejecutamos y recibimos la respuesta.
                     HttpResponse goodResponse = client.execute(httpPostFinal);
-                    body = inputStreamToString(goodResponse.getEntity().getContent());
+                    if (!method.equals(Method.DELETE)) {
+                        body = inputStreamToString(goodResponse.getEntity().getContent());
+                    } else {
+                        body = "";
+                    }
+                    lastStatusCode = goodResponse.getStatusLine().getStatusCode();
                 }
             }
 
@@ -171,8 +242,6 @@ public class Curl {
         if (method.equals(Method.GET)) {
             return new HttpGet(url.toURI());
         } else if (method.equals(Method.POST)) {
-            System.out.println("URL: " + url);
-            System.out.println("URL.toURI: " + url.toURI());
             return new HttpPost(url.toURI());
         } else if (method.equals(Method.PUT)) {
             return new HttpPut(url.toURI());
