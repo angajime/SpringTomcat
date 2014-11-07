@@ -37,6 +37,12 @@ public class Curl {
         DELETE
     }
 
+    private enum DMChannel {
+        Southbound,
+        Northbound,
+        Provisioning
+    }
+
     public static String send(String username, String password, String payload) {
         Curl provCurl = new Curl("m2m/southbound/dataStore", username, password, payload);
         return provCurl.post(DMChannel.Southbound);
@@ -282,4 +288,6 @@ public class Curl {
         // Return full string
         return total.toString();
     }
+
+
 }
