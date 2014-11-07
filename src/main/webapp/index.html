@@ -15,7 +15,30 @@
                 function(){
                     $(function()
                     { //DOM Ready
+                        function getURN(){
+                            return location.search.split('urn=')[1]
+                        }
+
+                        function loadBoard(urn){
+                            var dash = null;
+                            $.ajax({
+                                url: "dash/"+urn,
+                                success: function(data){
+                                    alert(data);
+                                    freeboard.loadDashboard(data);
+                                },
+                                error: function(error){
+                                    alert("ERROR");
+                                }
+                            });
+                            freeboard.loadDashboard(dash);
+                        }
+
+
                         freeboard.initialize(true);
+                        var urn = getURN();
+                        if(urn)
+                            loadBoard(urn);
                     });
                 });
     </script>

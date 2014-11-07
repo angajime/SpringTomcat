@@ -170,6 +170,44 @@ public class HelloController {
         return results;
     }
 
+    @RequestMapping("/freeboard/{urn}")
+    public String fb(@PathVariable(value = "urn") String urn) {
+        return "<script>window.location.assign(\"/index.html?urn="+urn+"\")</script>";
+    }
+
+    @RequestMapping("/dash/{urn}")
+    public Dashboard dash(@PathVariable(value = "urn") String urn){
+        List<Pane> panes = new LinkedList<Pane>();
+        List<Datasource> datasources = new LinkedList<Datasource>();
+        List<Widget> widgets = new LinkedList<Widget>();
+
+        List<Setting> settings = new LinkedList<Setting>();
+        settings.add(new Setting("text_widget","Mouse X","regular",
+                "datasources[\""+urn+"\"][\"params\"][\"mouse[x]\"]",
+                true));
+
+        List<Setting> settings2 = new LinkedList<Setting>();
+        settings2.add(new Setting("text_widget","Mouse Y","regular",
+                "datasources[\""+urn+"\"][\"params\"][\"mouse[y]\"]",
+                true));
+
+        widgets.add(new Widget(settings));
+        widgets.add(new Widget(settings2));
+
+        panes.add(new Pane(1,1,1,widgets));
+
+        datasources.add(new Datasource(
+                urn,
+                "JSON",
+                new Settings(
+                        "follow/"+urn,
+                        false,
+                        2,
+                        "GET")));
+
+        return new Dashboard(1,1,true, panes, datasources);
+    }
+
     @RequestMapping("/freeboard")
     public String fb() {
         return "<script>window.location.assign(\"/index.html\")</script>";
