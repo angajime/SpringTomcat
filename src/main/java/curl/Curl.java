@@ -43,11 +43,28 @@ public class Curl {
         Provisioning
     }
 
+    /**
+     * Sends a payload to the DM server. The function needs a valid username and password combination, and a valid XML payload.
+     *
+     * @param username
+     * @param password
+     * @param payload
+     * @return Answer of DM server
+     */
+
     public static String send(String username, String password, String payload) {
         Curl provCurl = new Curl("m2m/southbound/dataStore", username, password, payload);
         return provCurl.post(DMChannel.Southbound);
     }
 
+    /**
+     * Asks for all the payloads related to an specific Device Gateway. For this, you must provide
+     * a valid username and password combination, and the Device Gateway URN stored in the DM server.
+     * @param username
+     * @param password
+     * @param deviceGatewayName
+     * @return Answer of DM server
+     */
     // This is not assured to be functional
     public static String receive(String username, String password, String deviceGatewayName) {
         String enterpriseCustomer = "enterpriseCustomerCurlTest";
@@ -55,6 +72,16 @@ public class Curl {
         return curl.get(DMChannel.Northbound);
     }
 
+    /**
+     * Add a new element to the DM hierarchy. For this, you must provide a valid username and password
+     * combination, the type of the element you want to add (e.g. operator, sensor) and the parameters for the
+     * creation of this element (e.g. deviceGatewayURN=device_mytype_1234).
+     * @param username
+     * @param password
+     * @param type
+     * @param args Each parameter must be send as a different String
+     * @return Answer of DM server
+     */
     public static String add(String username, String password, String type, String... args) {
         Curl curl = new Curl("m2m/provisioning/LL/" + type, username, password, args);
         return curl.post(DMChannel.Provisioning);
