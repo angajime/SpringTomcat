@@ -52,9 +52,9 @@ public class Curl {
      * @return Answer of DM server
      */
 
-    public static String send(String username, String password, String payload) {
+    public static HttpResponse send(String username, String password, String payload) {
         Curl provCurl = new Curl("m2m/southbound/dataStore", username, password, payload);
-        return provCurl.post(DMChannel.Southbound);
+        return provCurl.execute(Method.POST, DMChannel.Southbound);
     }
 
     /**
@@ -66,10 +66,10 @@ public class Curl {
      * @return Answer of DM server
      */
     // This is not assured to be functional
-    public static String receive(String username, String password, String deviceGatewayName) {
+    public static HttpResponse receive(String username, String password, String deviceGatewayName) {
         String enterpriseCustomer = "enterpriseCustomerCurlTest";
         Curl curl = new Curl("m2m/dataServices/ec/" + enterpriseCustomer + "?gatewaySpec=" + deviceGatewayName, username, password);
-        return curl.get(DMChannel.Northbound);
+        return curl.execute(Method.GET, DMChannel.Northbound);
     }
 
     /**
@@ -82,9 +82,9 @@ public class Curl {
      * @param args Each parameter must be send as a different String
      * @return Answer of DM server
      */
-    public static String add(String username, String password, String type, String... args) {
+    public static HttpResponse add(String username, String password, String type, String... args) {
         Curl curl = new Curl("m2m/provisioning/LL/" + type, username, password, args);
-        return curl.post(DMChannel.Provisioning);
+        return curl.execute(Method.POST, DMChannel.Provisioning);
     }
 
 //    private static String add(String username, String password, String deviceGW, String sensor, String resource) {
@@ -171,9 +171,9 @@ public class Curl {
      * @return Answer from server
      */
 
-    private String post(DMChannel channel) {
-        return execute(Method.POST, channel);
-    }
+//    private String post(DMChannel channel) {
+//        return execute(Method.POST, channel);
+//    }
 
     /**
      * This method executes a GET petition to the DM server and returns an HTML webpage with the result of the petition.
@@ -182,9 +182,9 @@ public class Curl {
      * @return Answer from server
      */
 
-    private String get(DMChannel channel) {
-        return execute(Method.GET, channel);
-    }
+//    private String get(DMChannel channel) {
+//        return execute(Method.GET, channel);
+//    }
 
     /**
      * This method executes a PUT petition to the DM server and returns an HTML webpage with the result of the petition.
@@ -193,9 +193,9 @@ public class Curl {
      * @return Answer from server
      */
 
-    private String put(DMChannel channel) {
-        return execute(Method.PUT, channel);
-    }
+//    private String put(DMChannel channel) {
+//        return execute(Method.PUT, channel);
+//    }
 
     /**
      * This method executes a DELETE petition to the DM server and returns an HTML webpage with the result of the petition.
@@ -204,9 +204,9 @@ public class Curl {
      * @return Answer from server
      */
 
-    private String delete(DMChannel channel) {
-        return execute(Method.DELETE, channel);
-    }
+//    private String delete(DMChannel channel) {
+//        return execute(Method.DELETE, channel);
+//    }
 
     /**
      * This method executes the petition to the DM server and returns an HTML webpage with the result of the petition.
@@ -215,7 +215,8 @@ public class Curl {
      * @return Answer from server
      */
 
-    private String execute(Method method, DMChannel channel) {
+    private HttpResponse execute(Method method, DMChannel channel) {
+        HttpResponse goodResponse = null;
         try {
             //Creamos el esquema que se utilizará para procesar el challenge.
             DigestScheme md5Auth = new DigestScheme();
@@ -247,12 +248,12 @@ public class Curl {
                         ((HttpEntityEnclosingRequestBase)httpPostFinal).setEntity(new StringEntity(body));
                     }
                     //Ejecutamos y recibimos la respuesta.
-                    HttpResponse goodResponse = client.execute(httpPostFinal);
-                    if (!method.equals(Method.DELETE)) {
-                        body = inputStreamToString(goodResponse.getEntity().getContent());
-                    } else {
-                        body = "";
-                    }
+                    goodResponse = client.execute(httpPostFinal);
+//                    if (!method.equals(Method.DELETE)) {
+//                        body = inputStreamToString(goodResponse.getEntity().getContent());
+//                    } else {
+//                        body = "";
+//                    }
                     lastStatusCode = goodResponse.getStatusLine().getStatusCode();
                 }
             }
@@ -268,7 +269,7 @@ public class Curl {
         } catch (MalformedChallengeException e) {
             e.printStackTrace();
         }
-        return body;
+        return goodResponse;
     }
 
     private HttpUriRequest getHttpRequest(Method method) throws URISyntaxException {
@@ -297,7 +298,19 @@ public class Curl {
         }
     }
 
-    private String inputStreamToString(InputStream is) {
+    /**
+     * Gets the content from a HttpResponse as a String.
+     *
+     * @param httpResponse
+     * @return content as String
+     * @throws IOException
+     */
+
+    public static String getContentFromHttpResponse(HttpResponse httpResponse) throws IOException {
+        return inputStreamToString(httpResponse.getEntity().getContent());
+    }
+
+    private static String inputStreamToString(InputStream is) {
         String line;
         StringBuilder total = new StringBuilder();
 
