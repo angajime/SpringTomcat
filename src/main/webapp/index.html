@@ -12,26 +12,29 @@
     <script type="text/javascript">
         head.js("js/freeboard+plugins.min.js",
                 // *** Load more plugins here ***
+
                 function(){
+                    var dash = null;
                     $(function()
                     { //DOM Ready
+
+
                         function getURN(){
-                            return location.search.split('urn=')[1]
+                            return location.search.split('urn=')[1];
                         }
 
                         function loadBoard(urn){
-                            var dash = null;
                             $.ajax({
                                 url: "dash/"+urn,
                                 success: function(data){
                                     alert(data);
+                                    dash = data;
                                     freeboard.loadDashboard(data);
                                 },
                                 error: function(error){
                                     alert("ERROR");
                                 }
                             });
-                            freeboard.loadDashboard(dash);
                         }
 
 

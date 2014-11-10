@@ -6,34 +6,22 @@ import java.util.List;
  * Created by tarazaky on 6/11/14.
  */
 public class Widget {
-    private List<Setting> settings;
 
-    public Widget(List<Setting> settings) {
+
+    private String type;
+    private Setting settings;
+
+    public Widget(String type, Setting settings) {
+        this.type = type;
         this.settings = settings;
     }
 
-    public List<Setting> getSettings() {
+    public Setting getSettings() {
         return settings;
     }
 
-    public void setSettings(List<Setting> settings) {
+    public void setSettings(Setting settings) {
         this.settings = settings;
-    }
-}
-
-class Setting{
-    private String type;
-    private String title;
-    private String size;
-    private String value;
-    private Boolean animate;
-
-    Setting(String type, String title, String size, String value, Boolean animate) {
-        this.type = type;
-        this.title = title;
-        this.size = size;
-        this.value = value;
-        this.animate = animate;
     }
 
     public String getType() {
@@ -42,6 +30,20 @@ class Setting{
 
     public void setType(String type) {
         this.type = type;
+    }
+}
+
+class Setting{
+    private String title;
+    private String size;
+    private String value;
+    private Boolean animate;
+
+    Setting(String title, String size, String value, Boolean animate) {
+        this.title = title;
+        this.size = size;
+        this.value = value;
+        this.animate = animate;
     }
 
     public String getTitle() {

@@ -244,6 +244,18 @@ a:hover#thing-link
     color: white;
 }
 
+a#dash-link
+{
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+a:hover#dash-link
+{
+    color: white;
+}
+
 .row pre
 {
     margin: 0px;

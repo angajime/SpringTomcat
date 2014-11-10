@@ -18,33 +18,48 @@
             var interval;
 
             $("#try-it").click(function () {
-        var lat;
-        var lng;
-        var onSuccess = function(position) {
-            lat=position.coords.latitude;
-            lng=position.coords.longitude;
-        };
 
-        // onError Callback receives a PositionError object
-        //
-        function onError(error) {
-            alert('code: '    + error.code    + '\n' +
-                    'message: ' + error.message + '\n');
-        }
+                var tryIt = $("#try-it");
+                if(tryIt.text() == "Stop Sharing"){
+                    clearInterval(interval);
+                    tryIt.text("Try It Now");
+                    return;
+                }
 
+                var lat;
+                var lng;
+                var onSuccess = function(position) {
+                    lat=position.coords.latitude;
+                    lng=position.coords.longitude;
+                };
+
+                // onError Callback receives a PositionError object
+                //
+                function onError(error) {
+                    alert('code: '    + error.code    + '\n' +
+                            'message: ' + error.message + '\n');
+                }
+
+                if(!nombre)
                 $.ajax({
                     url: "../new"
                 })
                         .done(function (data) {
                             nombre = data;
-                            $("#thing-link").text("http://localhost:8080/follow/"+nombre);
+                            $("#thing-link")
+                                    .text("http://localhost:8080/follow/"+nombre)
+                                    .attr("href", "http://localhost:8080/follow/"+nombre);
+                            $("#dash-link")
+                                    .text("http://localhost:8080/freeboard/"+nombre)
+                                    .attr("href", "http://localhost:8080/freeboard/"+nombre);
                             $("#thing-name").text(data);
                         })
                         .fail(function () {
                             alert("error");
                         });
 
-                $("#try-it").text("Stop Sharing");
+
+                tryIt.text("Stop Sharing");
                 $("#try-box").show("slow");
 
                 var currentMousePos = { x: -1, y: -1 };
@@ -141,6 +156,8 @@
                     <div>Now, anyone (or thing) can follow your thing at:</div>
                     <div><a target="_blank" id="thing-link"></a></div>
                     <div>See how easy that was?</div>
+                    <div>Would you like to see your newly created dashboard?</div>
+                    <div><a target="_blank" id="dash-link"></a></div>
                 </div>
             </div>
             <!-- /col-lg-6 -->

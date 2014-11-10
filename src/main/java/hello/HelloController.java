@@ -181,18 +181,16 @@ public class HelloController {
         List<Datasource> datasources = new LinkedList<Datasource>();
         List<Widget> widgets = new LinkedList<Widget>();
 
-        List<Setting> settings = new LinkedList<Setting>();
-        settings.add(new Setting("text_widget","Mouse X","regular",
-                "datasources[\""+urn+"\"][\"params\"][\"mouse[x]\"]",
-                true));
+        Setting settings = new Setting("Mouse X","regular",
+                "datasources['"+urn+"']['params']['mouse[x]']",
+                true);
 
-        List<Setting> settings2 = new LinkedList<Setting>();
-        settings2.add(new Setting("text_widget","Mouse Y","regular",
-                "datasources[\""+urn+"\"][\"params\"][\"mouse[y]\"]",
-                true));
+        Setting settings2 = new Setting("Mouse Y","regular",
+                "datasources['"+urn+"']['params']['mouse[y]']",
+                true);
 
-        widgets.add(new Widget(settings));
-        widgets.add(new Widget(settings2));
+        widgets.add(new Widget("text_widget",settings));
+        widgets.add(new Widget("text_widget",settings2));
 
         panes.add(new Pane(1,1,1,widgets));
 
