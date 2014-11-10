@@ -9,13 +9,24 @@ public class Pane {
     private Integer width;
     private Integer row;
     private Integer col_width;
+    private Integer col;
     private List<Widget> widgets;
 
-    public Pane(Integer width, Integer row, Integer col_width, List<Widget> widgets) {
+    public Pane(Integer width, Integer row, Integer col_width, Integer col, List<Widget> widgets) {
         this.width = width;
         this.row = row;
         this.col_width = col_width;
         this.widgets = widgets;
+        this.col = col;
+    }
+
+    public Integer getCol() {
+
+        return col;
+    }
+
+    public void setCol(Integer col) {
+        this.col = col;
     }
 
     public Integer getWidth() {

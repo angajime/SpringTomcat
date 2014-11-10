@@ -36,8 +36,8 @@
                 // onError Callback receives a PositionError object
                 //
                 function onError(error) {
-                    alert('code: '    + error.code    + '\n' +
-                            'message: ' + error.message + '\n');
+                    //alert('code: '    + error.code    + '\n' +
+                    //        'message: ' + error.message + '\n');
                 }
 
                 if(!nombre)
@@ -71,15 +71,17 @@
                         currentMousePos.x = event.pageX;
                         currentMousePos.y = event.pageY;
                     });
+                    var mouse;
+                    var json;
+                    var geolocation;
                     if(lat!=undefined && lng!=undefined){
-
-                        var mouse= JSON.parse(JSON.stringify(currentMousePos));
-                        var geolocation = {latitude: lat, longitude: lng};
-                        var json = {mouse:mouse, location:geolocation};
+                        mouse = JSON.parse(JSON.stringify(currentMousePos));
+                        geolocation = {latitude: lat, longitude: lng};
+                        json  = {mouse:mouse, location:geolocation};
                     }
                     else{
-                        var mouse= JSON.parse(JSON.stringify(currentMousePos));
-                        var json = {mouse:mouse};
+                        mouse= JSON.parse(JSON.stringify(currentMousePos));
+                        json = {mouse:mouse};
                     }
 
                     $.ajax({
@@ -91,7 +93,7 @@
                                 $("#thing-data").text(JSON.stringify(json,undefined, 4))
                             })
                             .fail(function () {
-                                alert("error");
+                                console.log("error");
                             });
                 }, 1000)
 

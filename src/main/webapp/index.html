@@ -27,7 +27,6 @@
                             $.ajax({
                                 url: "dash/"+urn,
                                 success: function(data){
-                                    alert(data);
                                     dash = data;
                                     freeboard.loadDashboard(data);
                                 },

@@ -38,12 +38,35 @@ class Setting{
     private String size;
     private String value;
     private Boolean animate;
+    private String lat;
+    private String lon;
 
     Setting(String title, String size, String value, Boolean animate) {
         this.title = title;
         this.size = size;
         this.value = value;
         this.animate = animate;
+    }
+
+    Setting(String lat, String lon){
+        this.lat = lat;
+        this.lon = lon;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
     }
 
     public String getTitle() {

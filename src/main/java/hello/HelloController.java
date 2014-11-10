@@ -1,5 +1,6 @@
 package hello;
 
+import curl.Curl;
 import org.kohsuke.randname.RandomNameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -87,6 +88,8 @@ public class HelloController {
         Client client = new Client(urn, params);
         listaClientes.add(client);
         System.out.println(client.toString());
+
+
 
         //existe el cliente?
 
@@ -180,6 +183,7 @@ public class HelloController {
         List<Pane> panes = new LinkedList<Pane>();
         List<Datasource> datasources = new LinkedList<Datasource>();
         List<Widget> widgets = new LinkedList<Widget>();
+        List<Widget> widgets1 = new LinkedList<Widget>();
 
         Setting settings = new Setting("Mouse X","regular",
                 "datasources['"+urn+"']['params']['mouse[x]']",
@@ -189,10 +193,17 @@ public class HelloController {
                 "datasources['"+urn+"']['params']['mouse[y]']",
                 true);
 
+        Setting settings3 = new Setting(
+                "datasources['"+urn+"']['params']['location[latitude]']",
+                "datasources['"+urn+"']['params']['location[longitude]']");
+
         widgets.add(new Widget("text_widget",settings));
         widgets.add(new Widget("text_widget",settings2));
 
-        panes.add(new Pane(1,1,1,widgets));
+        widgets1.add(new Widget("google_map",settings3));
+
+        panes.add(new Pane(1,1,3,1,widgets1));
+        panes.add(new Pane(1,1,1,1,widgets));
 
         datasources.add(new Datasource(
                 urn,
