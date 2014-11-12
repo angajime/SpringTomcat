@@ -1,7 +1,6 @@
 package hello;
 
 import curl.Curl;
-import curl.DMChannel;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
