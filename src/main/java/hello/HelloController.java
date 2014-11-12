@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,18 @@ public class HelloController {
         listaClientes.add(client);
         System.out.println(client.toString());
 
-        Curl.send("domainApplicationCurlTest", "Password1", createPayload(urn, params));
+        //Se puede mandar el payload? Sino, crearlo y volver a intentar:
+        String payload = createPayload(urn, params);
+        if(Curl.send("domainApplicationCurlTest",
+                    "Password1",
+                    payload).getStatusLine().getStatusCode() == 403) {
+            System.out.println("Recibido 403: Realizamos subscripcion...");
+            subscribePayload(urn,params);
+            System.out.println("DATO_REENVIADO:"+
+            Curl.send("domainApplicationCurlTest",
+                    "Password1",
+                    payload).toString());
+        }
 
         //Alert update:
         rtn = alertLookupService.findAlert(jdbcTemplate, urn, params);
@@ -248,26 +260,68 @@ public class HelloController {
             plEntry += createEntry(urn, entry);
 
         String plFooter = "</m2m:request>";
-
         return plHeader + plEntry + plFooter;
     }
 
     private String createEntry(String urn, Map.Entry<String, String> entry) {
-        String sensor = entry.getKey();
-        String set = "";
-        String rec = "";
-        String value = "";
+        String key = entry.getKey().replaceAll("\\[", "_").replaceAll("\\]","_");
+        String sensor = key+"-Sensor-"+urn;
+        String set = key+"-Set-"+urn;
+        String rec = key+"-Rec-"+urn;
+        Long ms = System.currentTimeMillis();
+        String value = entry.getValue();
 
         return "<m2m:payloadEntry " +
                 "userId=\"userCurlTest\" " +
-                "gatewayId=\""+urn+"\"" +
-                "sensorId=\"sensor${id_sensor}\" " +
-                "resourceId=\"resourceSet${id_set}.resource${id_rec}\">" +
-                "<m2m:timestamp>`exec date +%s`000</m2m:timestamp>" +
-                "<m2m:value type=\"double\">${RANDOM}</m2m:value>" +
+                "gatewayId=\""+urn+"\" " +
+                "sensorId=\""+sensor+"\" " +
+                "resourceId=\""+set+".resource"+rec+"\">" +
+                "<m2m:timestamp>"+ms+"</m2m:timestamp>" +
+                "<m2m:value type=\"double\">"+value+"</m2m:value>" +
                 "</m2m:payloadEntry>";
+    }
 
+    private void subscribePayload(String urn, Map params) {
+        for(Map.Entry<String, String> entry : ((Map<String,String>)params).entrySet()) {
 
+            String key = entry.getKey().replaceAll("\\[", "_").replaceAll("\\]","_");
+            String sensor = key+"-Sensor-"+urn;
+            String set = key+"-Set-"+urn;
+            String rec = key+"-Rec-"+urn;
+
+            System.out.println(
+                    Curl.add("Preconfigured",
+                            "Password1",
+                            "sensor",
+                            "operatorIdentifier=opIDCurlTest",
+                            "sensorSpecificationURN=sensorSpecCurlTest",
+                            "parentGatewayURN="+urn,
+                            "sensorURN="+sensor,
+                            "name="+sensor,
+                            "deviceStatus=active").toString());
+            System.out.println(
+                    Curl.add("Preconfigured",
+                            "Password1",
+                            "resource",
+                            "operatorIdentifier=opIDCurlTest",
+                            "resourceSpecificationURN=resourceSpecCurlTest",
+                            "sensorURN="+sensor,
+                            "resourceURN="+set+"."+rec,
+                            "resourceSetURN="+set).toString());
+            System.out.println(
+                    Curl.add("Preconfigured",
+                            "Password1",
+                            "resourceSet",
+                            "operatorIdentifier=opIDCurlTest",
+                            "resourceSetURN="+set,
+                            "resourceURNList="+set+"."+rec).toString());
+            System.out.println(
+                    Curl.add("Preconfigured",
+                            "Password1",
+                            "resourceSet/"+set,
+                            "resourceURNList="+set+"."+rec)
+            );
+        }
     }
 
 }
