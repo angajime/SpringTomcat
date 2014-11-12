@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.Future;
 
 @RestController
@@ -41,7 +44,19 @@ public class HelloController {
 
     @RequestMapping("/new")
     public String newID() {
-        return (new RandomNameGenerator(new Random().nextInt())).next();
+        String urn = (new RandomNameGenerator(new Random().nextInt())).next();
+        System.out.println(
+                Curl.add("Preconfigured",
+                        "Password1",
+                        "deviceGateway",
+                        "operatorIdentifier=opIDCurlTest",
+                        "deviceGatewaySpecificationURN=deviceGWSpecCurlTest",
+                        "deviceGatewayGroupURN=deviceGWGCurlTest",
+                        "deviceStatus=active",
+                        "password=Password1",
+                        "name=" + urn,
+                        "deviceGatewayURN=" + urn).toString());
+        return urn;
     }
 
     /**
@@ -89,18 +104,10 @@ public class HelloController {
         listaClientes.add(client);
         System.out.println(client.toString());
 
+        Curl.send("domainApplicationCurlTest", "Password1", createPayload(urn, params));
 
-
-        //existe el cliente?
-
-        //si:
-        //  introducir sus datos
-
-        //no:
-        //  registrar sus datos
-
-        //Actualizar alertas
-        rtn = alertLookupService.findAlert(jdbcTemplate,urn,params);
+        //Alert update:
+        rtn = alertLookupService.findAlert(jdbcTemplate, urn, params);
 
         return client;
     }
@@ -149,12 +156,13 @@ public class HelloController {
     }
 
     @RequestMapping("/listdb")
-    public List<Alert> listdb(){
+    public List<Alert> listdb() {
 
         List<Alert> results = jdbcTemplate.query(
                 "select * from alerts",
                 new RowMapper<Alert>() {
                     List<String> ls = new LinkedList<String>();
+
                     @Override
                     public Alert mapRow(ResultSet rs, int rowNum) throws SQLException {
                         ls.add(rs.getString("recipient"));
@@ -165,7 +173,7 @@ public class HelloController {
                                 rs.getDouble("value"),
                                 ls,
                                 rs.getBoolean("active")
-                                );
+                        );
                     }
                 }
         );
@@ -175,46 +183,46 @@ public class HelloController {
 
     @RequestMapping("/freeboard/{urn}")
     public String fb(@PathVariable(value = "urn") String urn) {
-        return "<script>window.location.assign(\"/index.html?urn="+urn+"\")</script>";
+        return "<script>window.location.assign(\"/index.html?urn=" + urn + "\")</script>";
     }
 
     @RequestMapping("/dash/{urn}")
-    public Dashboard dash(@PathVariable(value = "urn") String urn){
+    public Dashboard dash(@PathVariable(value = "urn") String urn) {
         List<Pane> panes = new LinkedList<Pane>();
         List<Datasource> datasources = new LinkedList<Datasource>();
         List<Widget> widgets = new LinkedList<Widget>();
         List<Widget> widgets1 = new LinkedList<Widget>();
 
-        Setting settings = new Setting("Mouse X","regular",
-                "datasources['"+urn+"']['params']['mouse[x]']",
+        Setting settings = new Setting("Mouse X", "regular",
+                "datasources['" + urn + "']['params']['mouse[x]']",
                 true);
 
-        Setting settings2 = new Setting("Mouse Y","regular",
-                "datasources['"+urn+"']['params']['mouse[y]']",
+        Setting settings2 = new Setting("Mouse Y", "regular",
+                "datasources['" + urn + "']['params']['mouse[y]']",
                 true);
 
         Setting settings3 = new Setting(
-                "datasources['"+urn+"']['params']['location[latitude]']",
-                "datasources['"+urn+"']['params']['location[longitude]']");
+                "datasources['" + urn + "']['params']['location[latitude]']",
+                "datasources['" + urn + "']['params']['location[longitude]']");
 
-        widgets.add(new Widget("text_widget",settings));
-        widgets.add(new Widget("text_widget",settings2));
+        widgets.add(new Widget("text_widget", settings));
+        widgets.add(new Widget("text_widget", settings2));
 
-        widgets1.add(new Widget("google_map",settings3));
+        widgets1.add(new Widget("google_map", settings3));
 
-        panes.add(new Pane(1,1,3,1,widgets1));
-        panes.add(new Pane(1,1,1,1,widgets));
+        panes.add(new Pane(1, 1, 3, 1, widgets1));
+        panes.add(new Pane(1, 1, 1, 1, widgets));
 
         datasources.add(new Datasource(
                 urn,
                 "JSON",
                 new Settings(
-                        "follow/"+urn,
+                        "follow/" + urn,
                         false,
                         2,
                         "GET")));
 
-        return new Dashboard(1,1,true, panes, datasources);
+        return new Dashboard(1, 1, true, panes, datasources);
     }
 
     @RequestMapping("/freeboard")
@@ -225,6 +233,41 @@ public class HelloController {
     @RequestMapping("/send")
     public String sendJS() {
         return "<script>window.location.assign(\"/send/index.html\")</script>";
+    }
+
+    private String createPayload(String urn, Map params) {
+        String plHeader = "<?xml version=\"1.0\" " +
+                "encoding=\"UTF-8\"?>" +
+                "<m2m:request " +
+                "xmlns:m2m=\"urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.SB\" " +
+                "xmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\" " +
+                "applicationType=\"domainApplicationCurlTest\">";
+
+        String plEntry = "";
+        for(Map.Entry<String, String> entry : ((Map<String,String>)params).entrySet())
+            plEntry += createEntry(urn, entry);
+
+        String plFooter = "</m2m:request>";
+
+        return plHeader + plEntry + plFooter;
+    }
+
+    private String createEntry(String urn, Map.Entry<String, String> entry) {
+        String sensor = entry.getKey();
+        String set = "";
+        String rec = "";
+        String value = "";
+
+        return "<m2m:payloadEntry " +
+                "userId=\"userCurlTest\" " +
+                "gatewayId=\""+urn+"\"" +
+                "sensorId=\"sensor${id_sensor}\" " +
+                "resourceId=\"resourceSet${id_set}.resource${id_rec}\">" +
+                "<m2m:timestamp>`exec date +%s`000</m2m:timestamp>" +
+                "<m2m:value type=\"double\">${RANDOM}</m2m:value>" +
+                "</m2m:payloadEntry>";
+
+
     }
 
 }

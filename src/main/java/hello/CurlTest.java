@@ -34,7 +34,7 @@ public class CurlTest {
 //        Curl curl = new Curl("m2m/provisioning/LL/deviceGatewayGroupType/deviceGWGTypeJuanlu", "Preconfigured", "Password1");
 //        return curl.delete(DMChannel.Provisioning);
 //    }
-
+/*
     @RequestMapping("/curl/south/send")
     public String southSend() {
         return Curl.send("domainApplicationCurlTest", "Password1", payloadCreator() );
@@ -44,7 +44,7 @@ public class CurlTest {
     public String northReceive() {
         return Curl.receive("domainApplicationCurlTest", "Password1", "prueba");
     }
-
+*/
 //    @RequestMapping("/curl/prov/auto")
 //    public String provAuto() {
 //        return Curl.add("Preconfigured", "Password1", "deviceGatewayCurlTest2", "sensorCurlTest2", "resourceCurlTest2");
