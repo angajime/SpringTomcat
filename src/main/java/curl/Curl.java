@@ -58,17 +58,22 @@ public class Curl {
     }
 
     /**
-     * Asks for all the payloads related to an specific Device Gateway. For this, you must provide
-     * a valid username and password combination, and the Device Gateway URN stored in the DM server.
+     * Asks for all the payloads for the default Device Gateway Specification. For this, you must provide
+     * a valid username and password combination, and any parameters usable in the DM server.
      * @param username
      * @param password
-     * @param deviceGatewayName
+     * @param args Each parameter must be send as a different String
      * @return Answer of DM server
      */
     // This is not assured to be functional
-    public static HttpResponse receive(String username, String password, String deviceGatewayName) {
+    public static HttpResponse receive(String username, String password, String... args) {
         String enterpriseCustomer = "enterpriseCustomerCurlTest";
-        Curl curl = new Curl("m2m/dataServices/ec/" + enterpriseCustomer + "?gatewaySpec=" + deviceGatewayName, username, password);
+        String gatewaySpec = "deviceGWSpecCurlTest";
+        String urlParams = "?gatewaySpec=" + gatewaySpec;
+        for (String param : args) {
+            urlParams += "&" + param;
+        }
+        Curl curl = new Curl("m2m/dataServices/ec/" + enterpriseCustomer + urlParams, username, password);
         return curl.execute(Method.GET, DMChannel.Northbound);
     }
 
