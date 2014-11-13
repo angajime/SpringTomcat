@@ -169,49 +169,6 @@ public class Curl {
         }
     }
 
-    /**
-     * This method executes a POST petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String post(DMChannel channel) {
-//        return execute(Method.POST, channel);
-//    }
-
-    /**
-     * This method executes a GET petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String get(DMChannel channel) {
-//        return execute(Method.GET, channel);
-//    }
-
-    /**
-     * This method executes a PUT petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String put(DMChannel channel) {
-//        return execute(Method.PUT, channel);
-//    }
-
-    /**
-     * This method executes a DELETE petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String delete(DMChannel channel) {
-//        return execute(Method.DELETE, channel);
-//    }
 
     /**
      * This method executes the petition to the DM server and returns an HTML webpage with the result of the petition.
