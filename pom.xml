@@ -36,12 +36,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+                <!-- end::actuator[] --
+        <!-- tag::otherlibraries[] -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.3.5</version>
         </dependency>
-        <!-- end::actuator[] -->
+        <!-- end::otherlibraries[] -->
     </dependencies>
 
     <properties>
