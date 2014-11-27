@@ -14,10 +14,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpRequest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.XMLEvent;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -270,6 +270,60 @@ public class Curl {
 
     public static String getContentFromHttpResponse(HttpResponse httpResponse) throws IOException {
         return inputStreamToString(httpResponse.getEntity().getContent());
+    }
+
+    /**
+     * Filters the response XML to get only the resources for the specified device gateway URN
+     * @param response The HTTP response from DM server
+     * @param gatewayURN The gateway URN
+     * @return An InputStream that replaces the InputStream from the HttpResponse
+     * @throws IOException
+     * @throws XMLStreamException
+     */
+
+    public static InputStream filterXMLContent(HttpResponse response, String gatewayURN) throws IOException, XMLStreamException {
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        factory.setProperty(XMLInputFactory.IS_COALESCING, true);
+        XMLEventReader r = factory.createXMLEventReader(response.getEntity().getContent());
+        PipedInputStream in = new PipedInputStream();
+        OutputStream out = new PipedOutputStream(in);
+        XMLEventWriter w = XMLOutputFactory.newInstance().createXMLEventWriter(out);
+        XMLEvent event;
+        boolean deleteResource = false;
+        while (r.hasNext()) {
+            event = r.nextEvent();
+            if (event.getEventType() == XMLStreamConstants.START_ELEMENT && event.asStartElement().getName().toString().equals("{urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB}resource") && event.asStartElement().getAttributeByName(new QName("gatewayId")).getValue().equals(gatewayURN)) {
+                deleteResource = true;
+                continue;
+            } else if (event.getEventType() == XMLStreamConstants.END_ELEMENT && event.asEndElement().getName().toString().equals("{urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB}resource")) {
+                deleteResource = false;
+                continue;
+            } else if (deleteResource) {
+                continue;
+            } else {
+                w.add(event);
+            }
+        }
+        w.flush();
+        r.close();
+        w.close();
+        response.getEntity().getContent().close();
+        out.close();
+        return in;
+    }
+
+    /**
+     * Filters the response XML to get only the resources for the specified device gateway URN
+     *
+     * @param response The HTTP response from DM server
+     * @param gatewayURN The gateway URN
+     * @return An String that replaces the InputStream from the HttpResponse
+     * @throws IOException
+     * @throws XMLStreamException
+     */
+
+    public static String filterXMLContentAsString(HttpResponse response, String gatewayURN) throws IOException, XMLStreamException {
+        return Curl.inputStreamToString(filterXMLContent(response, gatewayURN));
     }
 
     private static String inputStreamToString(InputStream is) {
