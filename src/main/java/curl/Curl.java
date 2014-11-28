@@ -28,7 +28,6 @@ public class Curl {
     private URL url;
     private String body;
     private String hdr = "WWW-Authenticate";
-    private int lastStatusCode;
 
     private enum Method {
         GET,
@@ -162,12 +161,6 @@ public class Curl {
                     }
                     //Ejecutamos y recibimos la respuesta.
                     goodResponse = client.execute(httpPostFinal);
-//                    if (!method.equals(Method.DELETE)) {
-//                        body = inputStreamToString(goodResponse.getEntity().getContent());
-//                    } else {
-//                        body = "";
-//                    }
-                    lastStatusCode = goodResponse.getStatusLine().getStatusCode();
                 }
             }
 
@@ -295,6 +288,5 @@ public class Curl {
         // Return full string
         return total.toString();
     }
-
 
 }
