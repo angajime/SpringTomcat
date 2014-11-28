@@ -92,55 +92,6 @@ public class Curl {
         return curl.execute(Method.POST, DMChannel.Provisioning);
     }
 
-//    private static String add(String username, String password, String deviceGW, String sensor, String resource) {
-//        String operatorID = "opIDCurlTest";
-//        String deviceGWSpecURN = "deviceGWSpecCurlTest";
-//        String deviceGWGURN = "deviceGWGCurlTest";
-//        String connectivityServiceURN = "connectivityServiceCurlTest";
-//        String devicePassword = "Password1";
-//        String deviceSerialNumber = "SN1234";
-//        String deviceVendorNumber = "VN1234";
-//        String sensorSpecURN = "sensorSpecCurlTest";
-//        String sensorSerialNumber = "SNS1234";
-//        String resourceSpecURN = "resourceSpecCurlTest";
-//        String resourceAddress = "resourceAddress";
-//        String resourceSetURN = "resourceSetCurlTest";
-//
-//        Curl curlDeviceGW = new Curl("m2m/provisioning/LL/deviceGateway", username, password,
-//                "operatorIdentifier=" + operatorID,
-//                "deviceGatewaySpecificationURN=" + deviceGWSpecURN,
-//                "deviceGatewayGroupURN=" + deviceGWGURN,
-//                "deviceStatus=active",
-//                "connectivityServiceURN=" + connectivityServiceURN,
-//                "password=" + devicePassword,
-//                "serialNumber=" + deviceSerialNumber,
-//                "vendorNumber=" + deviceVendorNumber,
-//                "name=" + deviceGW,
-//                "deviceGatewayURN=device" + deviceGW);
-//
-//        Curl curlSensor = new Curl("m2m/provisioning/LL/sensor", username, password,
-//                "operatorIdentifier=" + operatorID,
-//                "sensorSpecificationURN=" + sensorSpecURN,
-//                "parentGatewayURN=device" + deviceGW,
-//                "sensorURN=sensor" + sensor,
-//                "name=" + sensor,
-//                "deviceStatus=active",
-//                "serialNumber=" + sensorSerialNumber);
-//        Curl curlResource = new Curl("m2m/provisioning/LL/resource", username, password,
-//                "operatorIdentifier=" + operatorID,
-//                "resourceSpecificationURN=" + resourceSpecURN,
-//                "sensorURN=sensor" + sensor,
-//                "resourceURN=resource" + resource,
-//                "physicalAddress=" + resourceAddress,
-//                "resourceSetURN=" + resourceSetURN);
-//
-//        System.out.println("DEBUG: DEVICE:\n" + curlDeviceGW.post(DMChannel.Provisioning));
-//        System.out.println("DEBUG: SENSOR:\n" + curlSensor.post(DMChannel.Provisioning));
-//        System.out.println("DEBUG: RESOURCE:\n" + curlResource.post(DMChannel.Provisioning));
-//
-//        return "Provisioning done. Unknown result.";
-//    }
-
     /**
      * This is the constructor for the Curl class. In this constructor you must provide the URL for the DM service, the username and user password
      * and whatever you want to send in the body. Take into account that you don't need to add the location of the DM server. So instead of
