@@ -45,9 +45,9 @@ public class Curl {
     /**
      * Sends a payload to the DM server. The function needs a valid username and password combination, and a valid XML payload.
      *
-     * @param username
-     * @param password
-     * @param payload
+     * @param username Username used to access the DM server
+     * @param password Password used to access the DM server
+     * @param payload The payload to send
      * @return Answer of DM server
      */
 
@@ -59,8 +59,8 @@ public class Curl {
     /**
      * Asks for all the payloads for the default Device Gateway Specification. For this, you must provide
      * a valid username and password combination, and any parameters usable in the DM server.
-     * @param username
-     * @param password
+     * @param username Username used to access the DM server
+     * @param password Password used to access the DM server
      * @param args Each parameter must be send as a different String
      * @return Answer of DM server
      */
@@ -80,9 +80,9 @@ public class Curl {
      * Add a new element to the DM hierarchy. For this, you must provide a valid username and password
      * combination, the type of the element you want to add (e.g. operator, sensor) and the parameters for the
      * creation of this element (e.g. deviceGatewayURN=device_mytype_1234).
-     * @param username
-     * @param password
-     * @param type
+     * @param username Username used to access the DM server
+     * @param password Password used to access the DM server
+     * @param type The type of the element to be added
      * @param args Each parameter must be send as a different String
      * @return Answer of DM server
      */
@@ -207,7 +207,7 @@ public class Curl {
     /**
      * Gets the content from a HttpResponse as a String.
      *
-     * @param httpResponse
+     * @param httpResponse The HttpResponse to "parse"
      * @return content as String
      * @throws IOException
      */
