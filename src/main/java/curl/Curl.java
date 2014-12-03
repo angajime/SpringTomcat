@@ -8,11 +8,13 @@ import org.apache.http.auth.MalformedChallengeException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpRequest;
+import org.apache.http.protocol.HttpContext;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
@@ -148,7 +150,8 @@ public class Curl {
                     Header solution = md5Auth.authenticate(
                             new UsernamePasswordCredentials(username, password),
                             new BasicHttpRequest(hg.getMethod(),
-                                    new URL(url.toString()).getPath()));
+                                    new URL(url.toString()).getPath()),
+                            new HttpClientContext());
                     Header contentType = getHeader(channel);
                     HttpUriRequest httpPostFinal = getHttpRequest(method);
                     Header[] headers = new Header[2];
