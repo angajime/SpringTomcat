@@ -46,7 +46,7 @@ public class HelloController {
     @RequestMapping("/new")
     public String newID() {
         String urn = (new RandomNameGenerator(new Random().nextInt())).next();
-        System.out.println(
+        /*System.out.println(
                 Curl.add("Preconfigured",
                         "Password1",
                         "deviceGateway",
@@ -56,7 +56,7 @@ public class HelloController {
                         "deviceStatus=active",
                         "password=Password1",
                         "name=" + urn,
-                        "deviceGatewayURN=" + urn).toString());
+                        "deviceGatewayURN=" + urn).toString());*/
         return urn;
     }
 
@@ -104,7 +104,7 @@ public class HelloController {
         Client client = new Client(urn, params);
         listaClientes.add(client);
         System.out.println(client.toString());
-
+/*
         //Se puede mandar el payload? Sino, crearlo y volver a intentar:
         String payload = createPayload(urn, params);
         if(Curl.send("domainApplicationCurlTest",
@@ -117,7 +117,7 @@ public class HelloController {
                     "Password1",
                     payload).toString());
         }
-
+*/
         //Alert update:
         rtn = alertLookupService.findAlert(jdbcTemplate, urn, params);
 

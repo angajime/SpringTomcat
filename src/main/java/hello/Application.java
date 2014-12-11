@@ -24,10 +24,13 @@ import java.util.concurrent.Future;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan
-public class Application {
+@ComponentScan(basePackages = "hello")
+public class Application extends SpringBootServletInitializer{
 
-
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
