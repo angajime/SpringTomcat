@@ -8,16 +8,18 @@ import org.apache.http.auth.MalformedChallengeException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpRequest;
+import org.apache.http.protocol.HttpContext;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.XMLEvent;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -28,7 +30,6 @@ public class Curl {
     private URL url;
     private String body;
     private String hdr = "WWW-Authenticate";
-    private int lastStatusCode;
 
     private enum Method {
         GET,
@@ -46,9 +47,9 @@ public class Curl {
     /**
      * Sends a payload to the DM server. The function needs a valid username and password combination, and a valid XML payload.
      *
-     * @param username
-     * @param password
-     * @param payload
+     * @param username Username used to access the DM server
+     * @param password Password used to access the DM server
+     * @param payload The payload to send
      * @return Answer of DM server
      */
 
@@ -58,17 +59,22 @@ public class Curl {
     }
 
     /**
-     * Asks for all the payloads related to an specific Device Gateway. For this, you must provide
-     * a valid username and password combination, and the Device Gateway URN stored in the DM server.
-     * @param username
-     * @param password
-     * @param deviceGatewayName
+     * Asks for all the payloads for the default Device Gateway Specification. For this, you must provide
+     * a valid username and password combination, and any parameters usable in the DM server.
+     * @param username Username used to access the DM server
+     * @param password Password used to access the DM server
+     * @param args Each parameter must be send as a different String
      * @return Answer of DM server
      */
     // This is not assured to be functional
-    public static HttpResponse receive(String username, String password, String deviceGatewayName) {
+    public static HttpResponse receive(String username, String password, String... args) {
         String enterpriseCustomer = "enterpriseCustomerCurlTest";
-        Curl curl = new Curl("m2m/dataServices/ec/" + enterpriseCustomer + "?gatewaySpec=" + deviceGatewayName, username, password);
+        String gatewaySpec = "deviceGWSpecCurlTest";
+        String urlParams = "?gatewaySpec=" + gatewaySpec;
+        for (String param : args) {
+            urlParams += "&" + param;
+        }
+        Curl curl = new Curl("m2m/dataServices/ec/" + enterpriseCustomer + urlParams, username, password);
         return curl.execute(Method.GET, DMChannel.Northbound);
     }
 
@@ -76,9 +82,9 @@ public class Curl {
      * Add a new element to the DM hierarchy. For this, you must provide a valid username and password
      * combination, the type of the element you want to add (e.g. operator, sensor) and the parameters for the
      * creation of this element (e.g. deviceGatewayURN=device_mytype_1234).
-     * @param username
-     * @param password
-     * @param type
+     * @param username Username used to access the DM server
+     * @param password Password used to access the DM server
+     * @param type The type of the element to be added
      * @param args Each parameter must be send as a different String
      * @return Answer of DM server
      */
@@ -86,55 +92,6 @@ public class Curl {
         Curl curl = new Curl("m2m/provisioning/LL/" + type, username, password, args);
         return curl.execute(Method.POST, DMChannel.Provisioning);
     }
-
-//    private static String add(String username, String password, String deviceGW, String sensor, String resource) {
-//        String operatorID = "opIDCurlTest";
-//        String deviceGWSpecURN = "deviceGWSpecCurlTest";
-//        String deviceGWGURN = "deviceGWGCurlTest";
-//        String connectivityServiceURN = "connectivityServiceCurlTest";
-//        String devicePassword = "Password1";
-//        String deviceSerialNumber = "SN1234";
-//        String deviceVendorNumber = "VN1234";
-//        String sensorSpecURN = "sensorSpecCurlTest";
-//        String sensorSerialNumber = "SNS1234";
-//        String resourceSpecURN = "resourceSpecCurlTest";
-//        String resourceAddress = "resourceAddress";
-//        String resourceSetURN = "resourceSetCurlTest";
-//
-//        Curl curlDeviceGW = new Curl("m2m/provisioning/LL/deviceGateway", username, password,
-//                "operatorIdentifier=" + operatorID,
-//                "deviceGatewaySpecificationURN=" + deviceGWSpecURN,
-//                "deviceGatewayGroupURN=" + deviceGWGURN,
-//                "deviceStatus=active",
-//                "connectivityServiceURN=" + connectivityServiceURN,
-//                "password=" + devicePassword,
-//                "serialNumber=" + deviceSerialNumber,
-//                "vendorNumber=" + deviceVendorNumber,
-//                "name=" + deviceGW,
-//                "deviceGatewayURN=device" + deviceGW);
-//
-//        Curl curlSensor = new Curl("m2m/provisioning/LL/sensor", username, password,
-//                "operatorIdentifier=" + operatorID,
-//                "sensorSpecificationURN=" + sensorSpecURN,
-//                "parentGatewayURN=device" + deviceGW,
-//                "sensorURN=sensor" + sensor,
-//                "name=" + sensor,
-//                "deviceStatus=active",
-//                "serialNumber=" + sensorSerialNumber);
-//        Curl curlResource = new Curl("m2m/provisioning/LL/resource", username, password,
-//                "operatorIdentifier=" + operatorID,
-//                "resourceSpecificationURN=" + resourceSpecURN,
-//                "sensorURN=sensor" + sensor,
-//                "resourceURN=resource" + resource,
-//                "physicalAddress=" + resourceAddress,
-//                "resourceSetURN=" + resourceSetURN);
-//
-//        System.out.println("DEBUG: DEVICE:\n" + curlDeviceGW.post(DMChannel.Provisioning));
-//        System.out.println("DEBUG: SENSOR:\n" + curlSensor.post(DMChannel.Provisioning));
-//        System.out.println("DEBUG: RESOURCE:\n" + curlResource.post(DMChannel.Provisioning));
-//
-//        return "Provisioning done. Unknown result.";
-//    }
 
     /**
      * This is the constructor for the Curl class. In this constructor you must provide the URL for the DM service, the username and user password
@@ -164,49 +121,6 @@ public class Curl {
         }
     }
 
-    /**
-     * This method executes a POST petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String post(DMChannel channel) {
-//        return execute(Method.POST, channel);
-//    }
-
-    /**
-     * This method executes a GET petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String get(DMChannel channel) {
-//        return execute(Method.GET, channel);
-//    }
-
-    /**
-     * This method executes a PUT petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String put(DMChannel channel) {
-//        return execute(Method.PUT, channel);
-//    }
-
-    /**
-     * This method executes a DELETE petition to the DM server and returns an HTML webpage with the result of the petition.
-     * If it returns a HTTP 401 then probably the user and password combination is invalid.
-     * @param channel The channel (Northbound, Southbound...)
-     * @return Answer from server
-     */
-
-//    private String delete(DMChannel channel) {
-//        return execute(Method.DELETE, channel);
-//    }
 
     /**
      * This method executes the petition to the DM server and returns an HTML webpage with the result of the petition.
@@ -236,7 +150,8 @@ public class Curl {
                     Header solution = md5Auth.authenticate(
                             new UsernamePasswordCredentials(username, password),
                             new BasicHttpRequest(hg.getMethod(),
-                                    new URL(url.toString()).getPath()));
+                                    new URL(url.toString()).getPath()),
+                            new HttpClientContext());
                     Header contentType = getHeader(channel);
                     HttpUriRequest httpPostFinal = getHttpRequest(method);
                     Header[] headers = new Header[2];
@@ -249,12 +164,6 @@ public class Curl {
                     }
                     //Ejecutamos y recibimos la respuesta.
                     goodResponse = client.execute(httpPostFinal);
-//                    if (!method.equals(Method.DELETE)) {
-//                        body = inputStreamToString(goodResponse.getEntity().getContent());
-//                    } else {
-//                        body = "";
-//                    }
-                    lastStatusCode = goodResponse.getStatusLine().getStatusCode();
                 }
             }
 
@@ -301,13 +210,67 @@ public class Curl {
     /**
      * Gets the content from a HttpResponse as a String.
      *
-     * @param httpResponse
+     * @param httpResponse The HttpResponse to "parse"
      * @return content as String
      * @throws IOException
      */
 
     public static String getContentFromHttpResponse(HttpResponse httpResponse) throws IOException {
         return inputStreamToString(httpResponse.getEntity().getContent());
+    }
+
+    /**
+     * Filters the response XML to get only the resources for the specified device gateway URN
+     * @param response The HTTP response from DM server
+     * @param gatewayURN The gateway URN
+     * @return An InputStream that replaces the InputStream from the HttpResponse
+     * @throws IOException
+     * @throws XMLStreamException
+     */
+
+    public static InputStream filterXMLContent(HttpResponse response, String gatewayURN) throws IOException, XMLStreamException {
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        factory.setProperty(XMLInputFactory.IS_COALESCING, true);
+        XMLEventReader r = factory.createXMLEventReader(response.getEntity().getContent());
+        PipedInputStream in = new PipedInputStream();
+        OutputStream out = new PipedOutputStream(in);
+        XMLEventWriter w = XMLOutputFactory.newInstance().createXMLEventWriter(out);
+        XMLEvent event;
+        boolean deleteResource = false;
+        while (r.hasNext()) {
+            event = r.nextEvent();
+            if (event.getEventType() == XMLStreamConstants.START_ELEMENT && event.asStartElement().getName().toString().equals("{urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB}resource") && event.asStartElement().getAttributeByName(new QName("gatewayId")).getValue().equals(gatewayURN)) {
+                deleteResource = true;
+                continue;
+            } else if (event.getEventType() == XMLStreamConstants.END_ELEMENT && event.asEndElement().getName().toString().equals("{urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB}resource")) {
+                deleteResource = false;
+                continue;
+            } else if (deleteResource) {
+                continue;
+            } else {
+                w.add(event);
+            }
+        }
+        w.flush();
+        r.close();
+        w.close();
+        response.getEntity().getContent().close();
+        out.close();
+        return in;
+    }
+
+    /**
+     * Filters the response XML to get only the resources for the specified device gateway URN
+     *
+     * @param response The HTTP response from DM server
+     * @param gatewayURN The gateway URN
+     * @return An String that replaces the InputStream from the HttpResponse
+     * @throws IOException
+     * @throws XMLStreamException
+     */
+
+    public static String filterXMLContentAsString(HttpResponse response, String gatewayURN) throws IOException, XMLStreamException {
+        return Curl.inputStreamToString(filterXMLContent(response, gatewayURN));
     }
 
     private static String inputStreamToString(InputStream is) {
@@ -328,6 +291,5 @@ public class Curl {
         // Return full string
         return total.toString();
     }
-
 
 }
