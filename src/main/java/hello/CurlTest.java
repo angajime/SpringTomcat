@@ -57,7 +57,7 @@ public class CurlTest {
         HttpResponse response = Curl.receive("domainApplicationCurlTest", "Password1");
         return Curl.filterXMLContentAsString(response, "deviceCurlTestStation");
     }
-*/
+
 //    @RequestMapping("/curl/prov/auto")
 //    public String provAuto() {
 //        return Curl.add("Preconfigured", "Password1", "deviceGatewayCurlTest2", "sensorCurlTest2", "resourceCurlTest2");
