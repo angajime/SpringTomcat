@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +72,7 @@ public class HelloController {
         List<Client> rtn = new LinkedList<Client>();
 
         for (Client c : listaClientes)
-            if (c.getId().equals(urn))
+            if (c.getBicycleURN().equals(urn))
                 rtn.add(c);
 
         return rtn;
@@ -85,7 +84,7 @@ public class HelloController {
         Client rtn = null;
 
         for (Client c : listaClientes)
-            if (c.getId().equals(urn))
+            if (c.getBicycleURN().equals(urn))
                 rtn = c;
 
         return rtn;
