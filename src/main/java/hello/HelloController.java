@@ -103,6 +103,7 @@ public class HelloController {
         Client client = new Client(urn, params);
         listaClientes.add(client);
         System.out.println(client.toString());
+        System.out.println(createPayload(urn, params));
 /*
         //Se puede mandar el payload? Sino, crearlo y volver a intentar:
         String payload = createPayload(urn, params);
@@ -246,6 +247,7 @@ public class HelloController {
         return "<script>window.location.assign(\"/send/index.html\")</script>";
     }
 
+    @Deprecated
     private String createPayload(String urn, Map params) {
         String plHeader = "<?xml version=\"1.0\" " +
                 "encoding=\"UTF-8\"?>" +
@@ -262,6 +264,7 @@ public class HelloController {
         return plHeader + plEntry + plFooter;
     }
 
+    @Deprecated
     private String createEntry(String urn, Map.Entry<String, String> entry) {
         String key = entry.getKey().replaceAll("\\[", "_").replaceAll("\\]","_");
         String sensor = key+"-Sensor-"+urn;
@@ -280,6 +283,7 @@ public class HelloController {
                 "</m2m:payloadEntry>";
     }
 
+    @Deprecated
     private void subscribePayload(String urn, Map params) {
         for(Map.Entry<String, String> entry : ((Map<String,String>)params).entrySet()) {
 
