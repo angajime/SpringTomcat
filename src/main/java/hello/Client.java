@@ -6,10 +6,9 @@ import org.json.JSONObject;
 import org.json.XML;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.TreeMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by tarazaky on 28/10/14.
@@ -134,5 +133,18 @@ public class Client {
 
         }
         return clients;
+    }
+
+    private static long parseTimestamp(String timestamp) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        try {
+            cal.setTime(sdf.parse(timestamp));
+        } catch (ParseException e) {
+            sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+            cal.setTime(sdf.parse(timestamp));
+        }
+
+        return cal.getTimeInMillis();
     }
 }
