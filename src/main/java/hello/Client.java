@@ -19,6 +19,7 @@ public class Client {
     private final String powerResourceURN;
     private final String stationResourceURN;
     private final static String userId = "userUMA";
+    private final static String domainApplication = "domainApplicationCurlTest";
     private Map params;
 
     public Client(String i, Map p){
@@ -189,5 +190,13 @@ public class Client {
         }
 
         return cal.getTimeInMillis();
+    }
+
+    public static String getCompleteMessage(String payloadEntries) {
+        StringBuilder strb = new StringBuilder();
+        strb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><m2m:request xmlns:m2m=\"urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.SB\" xmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\" applicationType=\"" + domainApplication + "\">");
+        strb.append(payloadEntries);
+        strb.append("</m2m:request>");
+        return strb.toString();
     }
 }
