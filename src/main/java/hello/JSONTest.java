@@ -13,16 +13,72 @@ import org.springframework.web.bind.annotation.RestController;
 public class JSONTest {
 
     public static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<m2m:request xmlns:m2m=\"urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.SB\" xmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\" applicationType=\"domainApplicationUMA\">\n" +
-            "\t<m2m:payloadEntry userId=\"userUMA\" gatewayId=\"devicewaifaiStation\" sensorId=\"sensorCounter\" resourceId=\"resourceSetAntena.resourceCantidad\">\n" +
-            "\t\t<m2m:timestamp>1412063953000</m2m:timestamp>\n" +
-            "\t\t<m2m:value type=\"double\">32.5</m2m:value>\n" +
-            "\t</m2m:payloadEntry>\n" +
-            "\t<m2m:payloadEntry userId=\"userUMA\" gatewayId=\"devicewaifaiStation\" sensorId=\"sensorCounter\" resourceId=\"resourceSetAntena.resourceCantidad\">\n" +
-            "\t\t<m2m:timestamp>1412063953500</m2m:timestamp>\n" +
-            "\t\t<m2m:value type=\"double\">42.5</m2m:value>\n" +
-            "\t</m2m:payloadEntry>\n" +
-            "</m2m:request>";
+            "<m2m:response\n" +
+            "    xmlns:m2m=\"urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB\"\n" +
+            "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
+            "    <m2m:resourceset resourcesetid=\"resourceSetCurlTest\">\n" +
+            "        <m2m:resource applicationtype=\"domainApplicationCurlTest\" gatewayid=\"deviceCurlTestStation\" resourceid=\"resourceSetCurlTest.resourcePower\" sensorid=\"sensorCurlTest\">\n" +
+            "            <m2m:payload>\n" +
+            "                <m2m:value type=\"double\">50.0</m2m:value>\n" +
+            "                <m2m:timestamp>2014-11-04T09:14:03Z</m2m:timestamp>\n" +
+            "            </m2m:payload>\n" +
+            "            <m2m:metadata>\n" +
+            "                <m2m:enduser>userCurlTest</m2m:enduser>\n" +
+            "                <m2m:resourcespec>resourceSpecCurlTest</m2m:resourcespec>\n" +
+            "                <m2m:sensorspec>sensorSpecCurlTest</m2m:sensorspec>\n" +
+            "                <m2m:gatewayspec>deviceGWSpecCurlTest</m2m:gatewayspec>\n" +
+            "            </m2m:metadata>\n" +
+            "        </m2m:resource>\n" +
+            "        <m2m:resource applicationtype=\"domainApplicationCurlTest\" gatewayid=\"deviceCurlTestStation\" resourceid=\"resourceSetCurlTest.resourcePower\" sensorid=\"sensorCurlTest\">\n" +
+            "            <m2m:payload>\n" +
+            "                <m2m:value type=\"double\">36.0</m2m:value>\n" +
+            "                <m2m:timestamp>2014-11-04T10:01:18.136Z</m2m:timestamp>\n" +
+            "            </m2m:payload>\n" +
+            "            <m2m:metadata>\n" +
+            "                <m2m:enduser>userCurlTest</m2m:enduser>\n" +
+            "                <m2m:resourcespec>resourceSpecCurlTest</m2m:resourcespec>\n" +
+            "                <m2m:sensorspec>sensorSpecCurlTest</m2m:sensorspec>\n" +
+            "                <m2m:gatewayspec>deviceGWSpecCurlTest</m2m:gatewayspec>\n" +
+            "            </m2m:metadata>\n" +
+            "        </m2m:resource>\n" +
+            "        <m2m:resource applicationtype=\"domainApplicationCurlTest\" gatewayid=\"deviceCurlTestStation\" resourceid=\"resourceSetCurlTest.resourceStation\" sensorid=\"sensorCurlTest\">\n" +
+            "            <m2m:payload>\n" +
+            "                <m2m:value type=\"double\">1.0</m2m:value>\n" +
+            "                <m2m:timestamp>2014-11-04T10:01:18.136Z</m2m:timestamp>\n" +
+            "            </m2m:payload>\n" +
+            "            <m2m:metadata>\n" +
+            "                <m2m:enduser>userCurlTest</m2m:enduser>\n" +
+            "                <m2m:resourcespec>resourceSpecCurlTest</m2m:resourcespec>\n" +
+            "                <m2m:sensorspec>sensorSpecCurlTest</m2m:sensorspec>\n" +
+            "                <m2m:gatewayspec>deviceGWSpecCurlTest</m2m:gatewayspec>\n" +
+            "            </m2m:metadata>\n" +
+            "        </m2m:resource>\n" +
+            "        <m2m:resource applicationtype=\"domainApplicationCurlTest\" gatewayid=\"deviceCurlTestStation\" resourceid=\"resourceSetCurlTest.resourceStation\" sensorid=\"sensorCurlTest\">\n" +
+            "            <m2m:payload>\n" +
+            "                <m2m:value type=\"double\">1.0</m2m:value>\n" +
+            "                <m2m:timestamp>2014-11-04T09:14:03Z</m2m:timestamp>\n" +
+            "            </m2m:payload>\n" +
+            "            <m2m:metadata>\n" +
+            "                <m2m:enduser>userCurlTest</m2m:enduser>\n" +
+            "                <m2m:resourcespec>resourceSpecCurlTest</m2m:resourcespec>\n" +
+            "                <m2m:sensorspec>sensorSpecCurlTest</m2m:sensorspec>\n" +
+            "                <m2m:gatewayspec>deviceGWSpecCurlTest</m2m:gatewayspec>\n" +
+            "            </m2m:metadata>\n" +
+            "        </m2m:resource>\n" +
+            "        <m2m:resource applicationtype=\"domainApplicationCurlTest\" gatewayid=\"bicycle2\" resourceid=\"resourceSetCurlTest.resourceStation\" sensorid=\"sensorCurlTest\">\n" +
+            "            <m2m:payload>\n" +
+            "                <m2m:value type=\"double\">1.0</m2m:value>\n" +
+            "                <m2m:timestamp>2014-11-04T09:14:03Z</m2m:timestamp>\n" +
+            "            </m2m:payload>\n" +
+            "            <m2m:metadata>\n" +
+            "                <m2m:enduser>userCurlTest</m2m:enduser>\n" +
+            "                <m2m:resourcespec>resourceSpecCurlTest</m2m:resourcespec>\n" +
+            "                <m2m:sensorspec>sensorSpecCurlTest</m2m:sensorspec>\n" +
+            "                <m2m:gatewayspec>deviceGWSpecCurlTest</m2m:gatewayspec>\n" +
+            "            </m2m:metadata>\n" +
+            "        </m2m:resource>\n" +
+            "    </m2m:resourceset>\n" +
+            "</m2m:response>";
 
     @RequestMapping("/json/fromxml")
     public String jsonFromXML() {

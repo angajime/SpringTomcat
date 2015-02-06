@@ -26,6 +26,28 @@ public class Client {
         sensorURN = bicycleURN + "sensorPower";
         powerResourceURN = sensorURN + ".power";
         stationResourceURN = sensorURN + ".station";
+        params = p;
+    }
+
+    public Client(String i, Map p, boolean autoprov){
+        bicycleURN = i;
+        sensorURN = bicycleURN + "sensorPower";
+        powerResourceURN = sensorURN + ".power";
+        stationResourceURN = sensorURN + ".station";
+        params = p;
+        if(autoprov) provisioning();
+    }
+
+    public String getBicycleURN() {
+        return bicycleURN;
+    }
+
+    public Map getParams() {
+        return params;
+    }
+
+    public void provisioning()
+    {
         String message = "nothing";
         try {
             message = Curl.getContentFromHttpResponse(Curl.add("Preconfigured", "Password1", "deviceGateway", "deviceGatewayURN=" + bicycleURN, "operatorIdentifier=opIDCurlTest", "deviceGatewaySpecificationURN=deviceGWSpecCurlTest", "deviceGatewayGroupURN=deviceGWGCurlTest", "deviceStatus=active", "connectivityServiceURN=connectivityServiceCurlTest", "password=Password1", "serialNumber=1234", "vendorNumber=9876", "name=Bicycle:" + bicycleURN));
@@ -38,15 +60,6 @@ public class Client {
             e.printStackTrace();
         }
         System.out.println(message);
-        params = p;
-    }
-
-    public String getBicycleURN() {
-        return bicycleURN;
-    }
-
-    public Map getParams() {
-        return params;
     }
 
     public void setParams(Map params) {
@@ -121,17 +134,47 @@ public class Client {
 
     public static Collection<Client> getClientsFromXML(String xml) {
         Collection<Client> clients = new HashSet<Client>();
-        JSONObject jsonObject = XML.toJSONObject(xml).getJSONObject("m2m:request");
-        System.out.println(jsonObject);
+        JSONObject jsonObject = XML.toJSONObject(xml).getJSONObject("m2m:response");
+        //System.out.println(jsonObject);
 
-        JSONArray payloadEntries = jsonObject.getJSONArray("m2m:payloadEntry");
-        System.out.println(payloadEntries);
-        for (int i = 0; i < payloadEntries.length(); i++) {
-            Map map = new TreeMap();
-            JSONObject payloadEntry = payloadEntries.getJSONObject(i);
-            //TODO Do something to store correctly the payloads
+        JSONObject resourceSet = jsonObject.getJSONObject("m2m:resourceset");
+        //System.out.println(resourceSet);
 
+        JSONArray resourceEntries = resourceSet.getJSONArray("m2m:resource");
+        //System.out.println(resourceEntries.toString());
+        Map<String,Map<Long,Map<String,String>>> map = new TreeMap();
+        for (int i = 0; i < resourceEntries.length(); i++) {
+            JSONObject resourceEntry = resourceEntries.getJSONObject(i);
+            System.out.println(resourceEntry.toString());
+            String gateway = (String)resourceEntry.get("gatewayid");
+            JSONObject payload = resourceEntry.getJSONObject("m2m:payload");
+            Long timestamp = (long) 0;
+            try {
+                timestamp = parseTimestamp((String) payload.get("m2m:timestamp"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String resource = (String) resourceEntry.get("resourceid");
+            String value = payload.getJSONObject("m2m:value").get("content").toString();
+
+            if(map.containsKey(gateway)) {
+                Map<Long,Map<String,String>> mg = map.get(gateway);
+                if (mg.containsKey(timestamp)) {
+                    mg.get(timestamp).put(resource, value);
+                } else {
+                    Map<String, String> m = new TreeMap();
+                    m.put(resource, value);
+                    mg.put(timestamp, m);
+                }
+            } else {
+                Map<Long,Map<String,String>> mg = new TreeMap();
+                Map<String, String> m = new TreeMap();
+                m.put(resource,value);
+                mg.put(timestamp,m);
+                map.put(gateway,mg);
+            }
         }
+        System.out.println(map);
         return clients;
     }
 
