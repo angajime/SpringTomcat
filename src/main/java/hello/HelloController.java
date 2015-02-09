@@ -45,6 +45,8 @@ public class HelloController {
     @RequestMapping("/new")
     public String newID() {
         String urn = (new RandomNameGenerator(new Random().nextInt())).next();
+        Client c = new Client(urn,null);
+        listaClientes.add(c);
         /*System.out.println(
                 Curl.add("Preconfigured",
                         "Password1",

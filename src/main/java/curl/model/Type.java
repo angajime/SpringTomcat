@@ -5,7 +5,10 @@ import java.util.Set;
 /**
  * Created by Juanlu on 31/10/14.
  */
-public abstract class Type {
+public abstract class Type extends Entity {
 
-    public abstract Set<Specification> getChildren();
+    protected Type(Operator parentOperator, String internalName, String externURN) {
+        super(parentOperator, internalName, externURN);
+    }
+
 }
