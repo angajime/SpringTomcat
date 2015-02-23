@@ -141,9 +141,9 @@ public class Client {
         JSONObject resourceSet = jsonObject.getJSONObject("m2m:resourceset");
         //System.out.println(resourceSet);
 
-        JSONArray resourceEntries = resourceSet.getJSONArray("m2m:resource");
+        JSONArray resourceEntries = resourceSet.getJSONArray("m2m:resource"); // resourceEntries has all the resources
         //System.out.println(resourceEntries.toString());
-        Map<String,Map<Long,Map<String,String>>> map = new TreeMap();
+        Map<String,Map<Long,Map<String,String>>> map = new TreeMap(); //Map<Gateway, Map<Timestamp, Map<Resource, Value>
         for (int i = 0; i < resourceEntries.length(); i++) {
             JSONObject resourceEntry = resourceEntries.getJSONObject(i);
             System.out.println(resourceEntry.toString());

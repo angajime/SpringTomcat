@@ -81,9 +81,9 @@ public class HelloController {
             e.printStackTrace();
         }
 
-        for (Client c : listaClientes)
-            if (c.getBicycleURN().equals(urn))
-                rtn.add(c);
+//        for (Client c : listaClientes)
+//            if (c.getBicycleURN().equals(urn))
+//                rtn.add(c);
 
         return rtn;
     }
