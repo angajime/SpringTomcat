@@ -9,12 +9,11 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.stream.XMLStreamException;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Future;
 
 @RestController
@@ -73,9 +72,20 @@ public class HelloController {
         //TODO: Leer datos de dicho cliente del DM
         List<Client> rtn = new LinkedList<Client>();
 
-        for (Client c : listaClientes)
-            if (c.getBicycleURN().equals(urn))
-                rtn.add(c);
+        try {
+            Collection<Client> clients = Client.getClientsFromXML(Curl.filterXMLContentAsString(Curl.receive("userCurlTest", "Password1", ""), urn));
+            for (Client client : clients) {
+                rtn.add(client);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XMLStreamException e) {
+            e.printStackTrace();
+        }
+
+//        for (Client c : listaClientes)
+//            if (c.getBicycleURN().equals(urn))
+//                rtn.add(c);
 
         return rtn;
     }
@@ -105,7 +115,8 @@ public class HelloController {
         Client client = new Client(urn, params);
         listaClientes.add(client);
         System.out.println(client.toString());
-        System.out.println(createPayload(urn, params));
+        Curl.send("userCurlTest", "Password1", Client.getCompleteMessage(client.toXMLPayloadEntry()));
+
 /*
         //Se puede mandar el payload? Sino, crearlo y volver a intentar:
         String payload = createPayload(urn, params);
