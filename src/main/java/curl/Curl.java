@@ -14,7 +14,6 @@ import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpRequest;
-import org.apache.http.protocol.HttpContext;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
@@ -68,8 +67,8 @@ public class Curl {
      */
     // This is not assured to be functional
     public static HttpResponse receive(String username, String password, String... args) {
-        String enterpriseCustomer = "enterpriseCustomerCurlTest";
-        String gatewaySpec = "deviceGWSpecCurlTest";
+        String enterpriseCustomer = "enterpriseCustomerBici";
+        String gatewaySpec = "deviceGWSpecBici";
         String urlParams = "?gatewaySpec=" + gatewaySpec;
         for (String param : args) {
             urlParams += "&" + param;
@@ -239,7 +238,7 @@ public class Curl {
         boolean deleteResource = false;
         while (r.hasNext()) {
             event = r.nextEvent();
-            if (event.getEventType() == XMLStreamConstants.START_ELEMENT && event.asStartElement().getName().toString().equals("{urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB}resource") && event.asStartElement().getAttributeByName(new QName("gatewayId")).getValue().equals(gatewayURN)) {
+            if (event.getEventType() == XMLStreamConstants.START_ELEMENT && event.asStartElement().getName().toString().equals("{urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB}resource") && !event.asStartElement().getAttributeByName(new QName("gatewayId")).getValue().equals(gatewayURN)) {
                 deleteResource = true;
                 continue;
             } else if (event.getEventType() == XMLStreamConstants.END_ELEMENT && event.asEndElement().getName().toString().equals("{urn:com:ericsson:schema:xml:m2m:protocols:vnd.ericsson.m2m.NB}resource")) {
@@ -279,15 +278,17 @@ public class Curl {
 
         // Wrap a BufferedReader around the InputStream
         BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-
+        System.out.println("Before while");
         // Read response until the end
         try {
-            while ((line = rd.readLine()) != null)
+            while ((line = rd.readLine()) != null) {
+                System.out.println(line);
                 total.append(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println("After while");
         // Return full string
         return total.toString();
     }

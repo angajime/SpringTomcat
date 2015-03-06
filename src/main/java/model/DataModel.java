@@ -9,6 +9,9 @@ import java.util.Set;
  */
 public class DataModel {
 
+    /**
+     * In this map, the String is the Device URN
+     */
     private Map<String, Device> deviceMap;
 
     private DataModel() {
@@ -29,7 +32,6 @@ public class DataModel {
         deviceMap.put(name, device);
         return device;
     }
-
 
     // Singleton methods
 

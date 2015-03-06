@@ -9,6 +9,9 @@ public abstract class Entity {
     String internalName;
     String externURN;
 
+    protected Entity() {
+    }
+
     public Operator getParentOperator() {
         return parentOperator;
     }
