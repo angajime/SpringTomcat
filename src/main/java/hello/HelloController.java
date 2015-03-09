@@ -1,6 +1,9 @@
 package hello;
 
 import curl.Curl;
+import model.DataModel;
+import model.Device;
+import model.Values;
 import org.kohsuke.randname.RandomNameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,8 +12,6 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.stream.XMLStreamException;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -68,38 +69,20 @@ public class HelloController {
      */
     @RequestMapping(value = {"/get/{urn}", "/every/{urn}"})
     @ResponseBody
-    public List<Client> get(@PathVariable("urn") String urn) {
-        //TODO: Leer datos de dicho cliente del DM
-        List<Client> rtn = new LinkedList<Client>();
-
-        try {
-            Collection<Client> clients = Client.getClientsFromXML(Curl.filterXMLContentAsString(Curl.receive("userCurlTest", "Password1", ""), urn));
-            for (Client client : clients) {
-                rtn.add(client);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
+    public Collection<Values> get(@PathVariable("urn") String urn) {
+        Device device = DataModel.getInstance().getDevice(urn);
+        Collection<Values> values = new HashSet<Values>();
+        for (Long timestamp : device.getAllTimes()) {
+            values.add(device.getDataForTime(timestamp));
         }
-
-//        for (Client c : listaClientes)
-//            if (c.getBicycleURN().equals(urn))
-//                rtn.add(c);
-
-        return rtn;
+        return values;
     }
 
     @RequestMapping(value = {"/follow/{urn}", "/latest/for/{urn}"})
     @ResponseBody
-    public Client getLast(@PathVariable("urn") String urn) {
-        Client rtn = null;
-
-        for (Client c : listaClientes)
-            if (c.getBicycleURN().equals(urn))
-                rtn = c;
-
-        return rtn;
+    public Values getLast(@PathVariable("urn") String urn) {
+        Device device = DataModel.getInstance().getDevice(urn);
+        return device.getDataForTime(device.getLastTime());
     }
 
     /**

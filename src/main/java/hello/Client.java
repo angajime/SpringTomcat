@@ -13,6 +13,7 @@ import java.util.*;
 /**
  * Created by tarazaky on 28/10/14.
  */
+@Deprecated
 public class Client {
     private final String bicycleURN;
     private final String sensorURN;
