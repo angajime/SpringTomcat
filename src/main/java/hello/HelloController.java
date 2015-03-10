@@ -71,6 +71,7 @@ public class HelloController {
     @ResponseBody
     public Collection<Values> get(@PathVariable("urn") String urn) {
         Device device = DataModel.getInstance().getDevice(urn);
+        device.updateValues();
         Collection<Values> values = new HashSet<Values>();
         for (Long timestamp : device.getAllTimes()) {
             values.add(device.getDataForTime(timestamp));
@@ -82,6 +83,7 @@ public class HelloController {
     @ResponseBody
     public Values getLast(@PathVariable("urn") String urn) {
         Device device = DataModel.getInstance().getDevice(urn);
+        device.updateValues();
         return device.getDataForTime(device.getLastTime());
     }
 

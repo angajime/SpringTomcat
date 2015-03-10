@@ -1,8 +1,11 @@
 package model;
 
 import curl.Curl;
+import org.apache.http.HttpResponse;
 
+import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -36,6 +39,24 @@ public class Device {
             } finally {
                 System.out.println(message);
             }
+        }
+    }
+
+    public boolean updateValues() {
+        boolean isOK = false;
+        HttpResponse response = Curl.receive(Constants.domainApplication, Constants.pass);
+        try {
+            Collection<Values> values = Values.getValuesFromXML(Curl.filterXMLContentAsString(response, name));
+            for (Values value : values) {
+                valuesMap.put((Long) value.getValue("timestamp"), value);
+            }
+            isOK = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XMLStreamException e) {
+            e.printStackTrace();
+        } finally {
+            return isOK;
         }
     }
 

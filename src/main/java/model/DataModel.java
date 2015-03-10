@@ -26,7 +26,13 @@ public class DataModel {
     }
 
     public Device getDevice(String name) {
-        return deviceMap.get(name);
+        Device device = deviceMap.get(name);
+        if (device == null) {
+            device = new Device(name, false);
+            deviceMap.put(name, device);
+        }
+        device.updateValues();
+        return device;
     }
 
     public Device getNewDevice(String name) {
